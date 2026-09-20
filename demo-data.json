@@ -1,0 +1,1053 @@
+{
+ "facts": [
+  {
+   "fact_id": "CERT-001",
+   "kind": "certificate",
+   "kind_label": "资质证书",
+   "title": "高新技术企业证书",
+   "issued_at": "2023-12-31",
+   "issuer": "湖北省科学技术厅",
+   "ref_no": "GR20234200xxxx",
+   "version": 1,
+   "rendered": "高新技术企业证书（湖北省科学技术厅颁发，有效期至 2023 年 12 月，证书编号 GR20234200xxxx）",
+   "evidence_uri": "minio://aibid-evidence/demo/CERT-001.pdf",
+   "evidence_sha": "ae8e0b176ebace72…"
+  },
+  {
+   "fact_id": "CERT-002",
+   "kind": "certificate",
+   "kind_label": "资质证书",
+   "title": "ISO9001 质量管理体系认证证书",
+   "issued_at": "2024-05-31",
+   "issuer": "中质协质量保证中心",
+   "ref_no": "00124Q30xxxR0M",
+   "version": 1,
+   "rendered": "ISO9001 质量管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124Q30xxxR0M）",
+   "evidence_uri": "minio://aibid-evidence/demo/CERT-002.pdf",
+   "evidence_sha": "f23c9481a4f9fc23…"
+  },
+  {
+   "fact_id": "CERT-003",
+   "kind": "certificate",
+   "kind_label": "资质证书",
+   "title": "ISO14001 环境管理体系认证证书",
+   "issued_at": "2024-05-31",
+   "issuer": "中质协质量保证中心",
+   "ref_no": "00124E30xxxR0M",
+   "version": 1,
+   "rendered": "ISO14001 环境管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124E30xxxR0M）",
+   "evidence_uri": "minio://aibid-evidence/demo/CERT-003.pdf",
+   "evidence_sha": "5a861d370f41df90…"
+  },
+  {
+   "fact_id": "CERT-004",
+   "kind": "certificate",
+   "kind_label": "资质证书",
+   "title": "安全生产许可证",
+   "issued_at": "2025-03-31",
+   "issuer": "湖北省住房和城乡建设厅",
+   "ref_no": "（鄂）JZ安许证字[2022]xxxxxx",
+   "version": 1,
+   "rendered": "安全生产许可证（湖北省住房和城乡建设厅颁发，有效期至 2025 年 03 月，证书编号 （鄂）JZ安许证字[2022]xxxxxx）",
+   "evidence_uri": "minio://aibid-evidence/demo/CERT-004.pdf",
+   "evidence_sha": "e08d9a2247f036b1…"
+  },
+  {
+   "fact_id": "CERT-005",
+   "kind": "certificate",
+   "kind_label": "资质证书",
+   "title": "黑臭水体治理产业联盟理事长单位证书",
+   "issued_at": "2022-10-31",
+   "issuer": "黑臭水体治理产业技术创新战略联盟",
+   "ref_no": "LM2022xxx",
+   "version": 1,
+   "rendered": "黑臭水体治理产业联盟理事长单位证书（黑臭水体治理产业技术创新战略联盟颁发，有效期至 2022 年 10 月，证书编号 LM2022xxx）",
+   "evidence_uri": "minio://aibid-evidence/demo/CERT-005.pdf",
+   "evidence_sha": "6ae4c3e649a9a4d3…"
+  },
+  {
+   "fact_id": "PAT-001",
+   "kind": "patent",
+   "kind_label": "专利",
+   "title": "一种农村生活污水一体化处理装置",
+   "issued_at": "2021-05-18",
+   "issuer": "国家知识产权局",
+   "ref_no": "ZL202110xxxxxx.1",
+   "version": 1,
+   "rendered": "一种农村生活污水一体化处理装置（2021 年授权，国家知识产权局，专利号 ZL202110xxxxxx.1）",
+   "evidence_uri": "minio://aibid-evidence/demo/PAT-001.pdf",
+   "evidence_sha": "451e6819ddfb5a27…"
+  },
+  {
+   "fact_id": "PAT-002",
+   "kind": "patent",
+   "kind_label": "专利",
+   "title": "一种光伏曝气机用智能控制方法",
+   "issued_at": "2022-03-22",
+   "issuer": "国家知识产权局",
+   "ref_no": "ZL202210xxxxxx.4",
+   "version": 1,
+   "rendered": "一种光伏曝气机用智能控制方法（2022 年授权，国家知识产权局，专利号 ZL202210xxxxxx.4）",
+   "evidence_uri": "minio://aibid-evidence/demo/PAT-002.pdf",
+   "evidence_sha": "1fe068c39fde8a35…"
+  },
+  {
+   "fact_id": "PAT-003",
+   "kind": "patent",
+   "kind_label": "专利",
+   "title": "一种黑臭水体原位修复的微生物菌剂投加装置",
+   "issued_at": "2020-09-11",
+   "issuer": "国家知识产权局",
+   "ref_no": "ZL202010xxxxxx.7",
+   "version": 1,
+   "rendered": "一种黑臭水体原位修复的微生物菌剂投加装置（2020 年授权，国家知识产权局，专利号 ZL202010xxxxxx.7）",
+   "evidence_uri": "minio://aibid-evidence/demo/PAT-003.pdf",
+   "evidence_sha": "bfc25747720b61cc…"
+  },
+  {
+   "fact_id": "PAT-004",
+   "kind": "patent",
+   "kind_label": "专利",
+   "title": "一种风光互补供电的污水处理系统",
+   "issued_at": "2023-01-06",
+   "issuer": "国家知识产权局",
+   "ref_no": "ZL202310xxxxxx.2",
+   "version": 1,
+   "rendered": "一种风光互补供电的污水处理系统（2023 年授权，国家知识产权局，专利号 ZL202310xxxxxx.2）",
+   "evidence_uri": "minio://aibid-evidence/demo/PAT-004.pdf",
+   "evidence_sha": "e988c1952bad925c…"
+  },
+  {
+   "fact_id": "PAT-005",
+   "kind": "patent",
+   "kind_label": "专利",
+   "title": "一种河道生态护坡结构",
+   "issued_at": "2019-07-30",
+   "issuer": "国家知识产权局",
+   "ref_no": "ZL201910xxxxxx.9",
+   "version": 1,
+   "rendered": "一种河道生态护坡结构（2019 年授权，国家知识产权局，专利号 ZL201910xxxxxx.9）",
+   "evidence_uri": "minio://aibid-evidence/demo/PAT-005.pdf",
+   "evidence_sha": "69fa8e205b41334a…"
+  },
+  {
+   "fact_id": "PAT-006",
+   "kind": "patent",
+   "kind_label": "专利",
+   "title": "一种污水处理用高效沉淀池",
+   "issued_at": "2022-11-25",
+   "issuer": "国家知识产权局",
+   "ref_no": "ZL202211xxxxxx.5",
+   "version": 1,
+   "rendered": "一种污水处理用高效沉淀池（2022 年授权，国家知识产权局，专利号 ZL202211xxxxxx.5）",
+   "evidence_uri": "minio://aibid-evidence/demo/PAT-006.pdf",
+   "evidence_sha": "4e7d1f25a1809b3a…"
+  },
+  {
+   "fact_id": "PRJ-001",
+   "kind": "project",
+   "kind_label": "工程业绩",
+   "title": "某某县农村生活污水治理工程（一期）",
+   "issued_at": "2021-10-15",
+   "issuer": "某某县住房和城乡建设局",
+   "ref_no": "HBJM-2021-037",
+   "version": 1,
+   "rendered": "某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）",
+   "evidence_uri": "minio://aibid-evidence/demo/PRJ-001.pdf",
+   "evidence_sha": "8f11b23338820cf8…"
+  },
+  {
+   "fact_id": "PRJ-002",
+   "kind": "project",
+   "kind_label": "工程业绩",
+   "title": "某某市黑臭水体整治工程",
+   "issued_at": "2020-06-28",
+   "issuer": "某某市城市管理执法局",
+   "ref_no": "HBJM-2020-014",
+   "version": 1,
+   "rendered": "某某市黑臭水体整治工程（2020 年 06 月，建设单位 某某市城市管理执法局）（合同号 HBJM-2020-014）",
+   "evidence_uri": "minio://aibid-evidence/demo/PRJ-002.pdf",
+   "evidence_sha": "9d396777d0385c5e…"
+  },
+  {
+   "fact_id": "PRJ-003",
+   "kind": "project",
+   "kind_label": "工程业绩",
+   "title": "某某镇污水处理厂提标改造工程",
+   "issued_at": "2022-08-09",
+   "issuer": "某某镇人民政府",
+   "ref_no": "HBJM-2022-052",
+   "version": 1,
+   "rendered": "某某镇污水处理厂提标改造工程（2022 年 08 月，建设单位 某某镇人民政府）（合同号 HBJM-2022-052）",
+   "evidence_uri": "minio://aibid-evidence/demo/PRJ-003.pdf",
+   "evidence_sha": "3f84031b8b21b360…"
+  },
+  {
+   "fact_id": "PRJ-004",
+   "kind": "project",
+   "kind_label": "工程业绩",
+   "title": "某某区农村环境综合整治项目",
+   "issued_at": "2023-04-20",
+   "issuer": "某某区生态环境分局",
+   "ref_no": "HBJM-2023-008",
+   "version": 1,
+   "rendered": "某某区农村环境综合整治项目（2023 年 04 月，建设单位 某某区生态环境分局）（合同号 HBJM-2023-008）",
+   "evidence_uri": "minio://aibid-evidence/demo/PRJ-004.pdf",
+   "evidence_sha": "48caaeece3c89e4e…"
+  },
+  {
+   "fact_id": "PRJ-005",
+   "kind": "project",
+   "kind_label": "工程业绩",
+   "title": "某某县河道生态修复工程",
+   "issued_at": "2019-12-05",
+   "issuer": "某某县水利和湖泊局",
+   "ref_no": "HBJM-2019-061",
+   "version": 1,
+   "rendered": "某某县河道生态修复工程（2019 年 12 月，建设单位 某某县水利和湖泊局）（合同号 HBJM-2019-061）",
+   "evidence_uri": "minio://aibid-evidence/demo/PRJ-005.pdf",
+   "evidence_sha": "3a1bb31ceb3a0601…"
+  },
+  {
+   "fact_id": "PRJ-006",
+   "kind": "project",
+   "kind_label": "工程业绩",
+   "title": "某某村分散式污水处理设施建设",
+   "issued_at": "2024-03-12",
+   "issuer": "某某乡人民政府",
+   "ref_no": "HBJM-2024-021",
+   "version": 1,
+   "rendered": "某某村分散式污水处理设施建设（2024 年 03 月，建设单位 某某乡人民政府）（合同号 HBJM-2024-021）",
+   "evidence_uri": "minio://aibid-evidence/demo/PRJ-006.pdf",
+   "evidence_sha": "260a58b61a04afec…"
+  },
+  {
+   "fact_id": "QUAL-001",
+   "kind": "qualification",
+   "kind_label": "资质类别",
+   "title": "环境工程（水污染防治）设计专项乙级",
+   "issued_at": "2021-06-30",
+   "issuer": "湖北省住房和城乡建设厅",
+   "ref_no": "A1420xxxxxx",
+   "version": 1,
+   "rendered": "环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅）",
+   "evidence_uri": "minio://aibid-evidence/demo/QUAL-001.pdf",
+   "evidence_sha": "55d7ee641e12d8a1…"
+  },
+  {
+   "fact_id": "QUAL-002",
+   "kind": "qualification",
+   "kind_label": "资质类别",
+   "title": "环保工程专业承包壹级",
+   "issued_at": "2020-11-15",
+   "issuer": "湖北省住房和城乡建设厅",
+   "ref_no": "D2420xxxxxx",
+   "version": 1,
+   "rendered": "环保工程专业承包壹级（湖北省住房和城乡建设厅）",
+   "evidence_uri": "minio://aibid-evidence/demo/QUAL-002.pdf",
+   "evidence_sha": "5c1e9aceab9e3c17…"
+  },
+  {
+   "fact_id": "QUAL-003",
+   "kind": "qualification",
+   "kind_label": "资质类别",
+   "title": "市政公用工程施工总承包贰级",
+   "issued_at": "2019-08-20",
+   "issuer": "湖北省住房和城乡建设厅",
+   "ref_no": "D3420xxxxxx",
+   "version": 1,
+   "rendered": "市政公用工程施工总承包贰级（湖北省住房和城乡建设厅）",
+   "evidence_uri": "minio://aibid-evidence/demo/QUAL-003.pdf",
+   "evidence_sha": "f24ddfac94985275…"
+  }
+ ],
+ "opportunities": [
+  {
+   "notice_id": "N-001",
+   "title": "某某县农村生活污水治理工程（二期）",
+   "score": 9.4,
+   "verdict": "推荐",
+   "reasons": [
+    "具备环保工程专业承包壹级，同类业绩 2 项，专利 2 项"
+   ],
+   "matched": [
+    {
+     "fact_id": "PRJ-001",
+     "title": "某某县农村生活污水治理工程（一期）"
+    },
+    {
+     "fact_id": "PAT-001",
+     "title": "一种农村生活污水一体化处理装置"
+    }
+   ]
+  },
+  {
+   "notice_id": "N-002",
+   "title": "某某镇污水处理厂提标改造工程",
+   "score": 8.1,
+   "verdict": "推荐",
+   "reasons": [
+    "设计专项乙级满足门槛，有同类提标改造业绩"
+   ],
+   "matched": [
+    {
+     "fact_id": "PRJ-003",
+     "title": "某某镇污水处理厂提标改造工程"
+    }
+   ]
+  },
+  {
+   "notice_id": "N-003",
+   "title": "某某区河道生态修复工程",
+   "score": 6.2,
+   "verdict": "待定",
+   "reasons": [
+    "资质满足但缺少河道修复类业绩，需人工判断"
+   ],
+   "matched": []
+  },
+  {
+   "notice_id": "N-004",
+   "title": "某某市市政道路照明工程",
+   "score": 2.1,
+   "verdict": "不推荐",
+   "reasons": [
+    "与公司主业不符，无对应资质与业绩"
+   ],
+   "matched": []
+  },
+  {
+   "notice_id": "N-005",
+   "title": "某某县垃圾填埋场封场工程",
+   "score": 1.4,
+   "verdict": "不推荐",
+   "reasons": [
+    "无固废处理资质，超出业务范围"
+   ],
+   "matched": []
+  }
+ ],
+ "generate": {
+  "商务标|农村生活污水": {
+   "draft_id": "DRAFT-B6A98DC0CF36",
+   "keyword": "农村生活污水",
+   "template": "商务标",
+   "blocked": false,
+   "status": "verified",
+   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
+   "generated_by": "小陈",
+   "sections": [
+    {
+     "heading": "第一章 投标人基本情况",
+     "text": "我公司为依法注册的环保工程企业，具备环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅），并持有安全生产许可证（湖北省住房和城乡建设厅颁发，有效期至 2025 年 03 月，证书编号 （鄂）JZ安许证字[2022]xxxxxx）、ISO9001 质量管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124Q30xxxR0M）、ISO14001 环境管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124E30xxxR0M）、高新技术企业证书（湖北省科学技术厅颁发，有效期至 2023 年 12 月，证书编号 GR20234200xxxx）。上述资质证书均在有效期内，投标时可提供原件核验。"
+    },
+    {
+     "heading": "第二章 类似工程业绩",
+     "text": "近年我公司完成的同类工程业绩包括某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）、某某区农村环境综合整治项目（2023 年 04 月，建设单位 某某区生态环境分局）（合同号 HBJM-2023-008）、某某镇污水处理厂提标改造工程（2022 年 08 月，建设单位 某某镇人民政府）（合同号 HBJM-2022-052）、某某村分散式污水处理设施建设（2024 年 03 月，建设单位 某某乡人民政府）（合同号 HBJM-2024-021）。以上项目均已竣工并通过建设单位验收，可提供合同及验收证明。"
+    },
+    {
+     "heading": "第三章 技术能力与知识产权",
+     "text": "我公司在环保治理领域持续投入研发，已获授权专利包括一种农村生活污水一体化处理装置（2021 年授权，国家知识产权局，专利号 ZL202110xxxxxx.1）、一种污水处理用高效沉淀池（2022 年授权，国家知识产权局，专利号 ZL202211xxxxxx.5）、一种风光互补供电的污水处理系统（2023 年授权，国家知识产权局，专利号 ZL202310xxxxxx.2）。上述专利均为自主申请，权属清晰无争议。"
+    }
+   ],
+   "citations": [
+    {
+     "fact_id": "QUAL-001",
+     "start": 18,
+     "end": 48,
+     "rendered": "环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅）",
+     "kind": "qualification",
+     "title": "环境工程（水污染防治）设计专项乙级",
+     "evidence_uri": "minio://aibid-evidence/demo/QUAL-001.pdf",
+     "issued_at": "2021-06-30"
+    },
+    {
+     "fact_id": "CERT-004",
+     "start": 52,
+     "end": 118,
+     "rendered": "安全生产许可证（湖北省住房和城乡建设厅颁发，有效期至 2025 年 03 月，证书编号 （鄂）JZ安许证字[2022]xxxxxx）",
+     "kind": "certificate",
+     "title": "安全生产许可证",
+     "evidence_uri": "minio://aibid-evidence/demo/CERT-004.pdf",
+     "issued_at": "2025-03-31"
+    },
+    {
+     "fact_id": "CERT-002",
+     "start": 119,
+     "end": 187,
+     "rendered": "ISO9001 质量管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124Q30xxxR0M）",
+     "kind": "certificate",
+     "title": "ISO9001 质量管理体系认证证书",
+     "evidence_uri": "minio://aibid-evidence/demo/CERT-002.pdf",
+     "issued_at": "2024-05-31"
+    },
+    {
+     "fact_id": "CERT-003",
+     "start": 188,
+     "end": 257,
+     "rendered": "ISO14001 环境管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124E30xxxR0M）",
+     "kind": "certificate",
+     "title": "ISO14001 环境管理体系认证证书",
+     "evidence_uri": "minio://aibid-evidence/demo/CERT-003.pdf",
+     "issued_at": "2024-05-31"
+    },
+    {
+     "fact_id": "CERT-001",
+     "start": 258,
+     "end": 315,
+     "rendered": "高新技术企业证书（湖北省科学技术厅颁发，有效期至 2023 年 12 月，证书编号 GR20234200xxxx）",
+     "kind": "certificate",
+     "title": "高新技术企业证书",
+     "evidence_uri": "minio://aibid-evidence/demo/CERT-001.pdf",
+     "issued_at": "2023-12-31"
+    },
+    {
+     "fact_id": "PRJ-001",
+     "start": 357,
+     "end": 423,
+     "rendered": "某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）",
+     "kind": "project",
+     "title": "某某县农村生活污水治理工程（一期）",
+     "evidence_uri": "minio://aibid-evidence/demo/PRJ-001.pdf",
+     "issued_at": "2021-10-15"
+    },
+    {
+     "fact_id": "PRJ-004",
+     "start": 424,
+     "end": 484,
+     "rendered": "某某区农村环境综合整治项目（2023 年 04 月，建设单位 某某区生态环境分局）（合同号 HBJM-2023-008）",
+     "kind": "project",
+     "title": "某某区农村环境综合整治项目",
+     "evidence_uri": "minio://aibid-evidence/demo/PRJ-004.pdf",
+     "issued_at": "2023-04-20"
+    },
+    {
+     "fact_id": "PRJ-003",
+     "start": 485,
+     "end": 544,
+     "rendered": "某某镇污水处理厂提标改造工程（2022 年 08 月，建设单位 某某镇人民政府）（合同号 HBJM-2022-052）",
+     "kind": "project",
+     "title": "某某镇污水处理厂提标改造工程",
+     "evidence_uri": "minio://aibid-evidence/demo/PRJ-003.pdf",
+     "issued_at": "2022-08-09"
+    },
+    {
+     "fact_id": "PRJ-006",
+     "start": 545,
+     "end": 604,
+     "rendered": "某某村分散式污水处理设施建设（2024 年 03 月，建设单位 某某乡人民政府）（合同号 HBJM-2024-021）",
+     "kind": "project",
+     "title": "某某村分散式污水处理设施建设",
+     "evidence_uri": "minio://aibid-evidence/demo/PRJ-006.pdf",
+     "issued_at": "2024-03-12"
+    },
+    {
+     "fact_id": "PAT-001",
+     "start": 660,
+     "end": 714,
+     "rendered": "一种农村生活污水一体化处理装置（2021 年授权，国家知识产权局，专利号 ZL202110xxxxxx.1）",
+     "kind": "patent",
+     "title": "一种农村生活污水一体化处理装置",
+     "evidence_uri": "minio://aibid-evidence/demo/PAT-001.pdf",
+     "issued_at": "2021-05-18"
+    },
+    {
+     "fact_id": "PAT-006",
+     "start": 715,
+     "end": 766,
+     "rendered": "一种污水处理用高效沉淀池（2022 年授权，国家知识产权局，专利号 ZL202211xxxxxx.5）",
+     "kind": "patent",
+     "title": "一种污水处理用高效沉淀池",
+     "evidence_uri": "minio://aibid-evidence/demo/PAT-006.pdf",
+     "issued_at": "2022-11-25"
+    },
+    {
+     "fact_id": "PAT-004",
+     "start": 767,
+     "end": 821,
+     "rendered": "一种风光互补供电的污水处理系统（2023 年授权，国家知识产权局，专利号 ZL202310xxxxxx.2）",
+     "kind": "patent",
+     "title": "一种风光互补供电的污水处理系统",
+     "evidence_uri": "minio://aibid-evidence/demo/PAT-004.pdf",
+     "issued_at": "2023-01-06"
+    }
+   ],
+   "reasons": [],
+   "risk": {
+    "coverage": 1.0,
+    "checked": 12,
+    "findings": [
+     {
+      "code": "R10_报价大写与小写不一致",
+      "located": "投标函",
+      "detail": "报价大写或小写缺失，无法核验一致性"
+     },
+     {
+      "code": "R12_文件签署或盖章页缺失",
+      "located": "签署页",
+      "detail": "缺少签署或盖章页"
+     }
+    ]
+   }
+  },
+  "技术标|农村生活污水": {
+   "draft_id": "DRAFT-C367D59CF2E8",
+   "keyword": "农村生活污水",
+   "template": "技术标",
+   "blocked": false,
+   "status": "verified",
+   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
+   "generated_by": "小陈",
+   "sections": [
+    {
+     "heading": "第一章 项目理解与总体思路",
+     "text": "本次招标项目与我公司主业高度契合。结合我方在某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）中积累的工程经验，拟按现行技术规范编制本技术方案。"
+    },
+    {
+     "heading": "第二章 工艺路线与关键技术",
+     "text": "针对本项目的治理目标，我方采用以一种农村生活污水一体化处理装置（2021 年授权，国家知识产权局，专利号 ZL202110xxxxxx.1）为核心的工艺路线，该技术在同类项目中已有实际应用验证，处理效果稳定可达标。"
+    },
+    {
+     "heading": "第三章 履约能力保障",
+     "text": "我方具备环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅），并已完成某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）、某某区农村环境综合整治项目（2023 年 04 月，建设单位 某某区生态环境分局）（合同号 HBJM-2023-008）等工程，人员、设备与资金均可满足本项目工期要求。"
+    }
+   ],
+   "citations": [
+    {
+     "fact_id": "PRJ-001",
+     "start": 22,
+     "end": 88,
+     "rendered": "某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）",
+     "kind": "project",
+     "title": "某某县农村生活污水治理工程（一期）",
+     "evidence_uri": "minio://aibid-evidence/demo/PRJ-001.pdf",
+     "issued_at": "2021-10-15"
+    },
+    {
+     "fact_id": "PAT-001",
+     "start": 130,
+     "end": 184,
+     "rendered": "一种农村生活污水一体化处理装置（2021 年授权，国家知识产权局，专利号 ZL202110xxxxxx.1）",
+     "kind": "patent",
+     "title": "一种农村生活污水一体化处理装置",
+     "evidence_uri": "minio://aibid-evidence/demo/PAT-001.pdf",
+     "issued_at": "2021-05-18"
+    },
+    {
+     "fact_id": "QUAL-001",
+     "start": 226,
+     "end": 256,
+     "rendered": "环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅）",
+     "kind": "qualification",
+     "title": "环境工程（水污染防治）设计专项乙级",
+     "evidence_uri": "minio://aibid-evidence/demo/QUAL-001.pdf",
+     "issued_at": "2021-06-30"
+    },
+    {
+     "fact_id": "PRJ-001",
+     "start": 261,
+     "end": 327,
+     "rendered": "某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）",
+     "kind": "project",
+     "title": "某某县农村生活污水治理工程（一期）",
+     "evidence_uri": "minio://aibid-evidence/demo/PRJ-001.pdf",
+     "issued_at": "2021-10-15"
+    },
+    {
+     "fact_id": "PRJ-004",
+     "start": 328,
+     "end": 388,
+     "rendered": "某某区农村环境综合整治项目（2023 年 04 月，建设单位 某某区生态环境分局）（合同号 HBJM-2023-008）",
+     "kind": "project",
+     "title": "某某区农村环境综合整治项目",
+     "evidence_uri": "minio://aibid-evidence/demo/PRJ-004.pdf",
+     "issued_at": "2023-04-20"
+    }
+   ],
+   "reasons": [],
+   "risk": {
+    "coverage": 1.0,
+    "checked": 12,
+    "findings": [
+     {
+      "code": "R10_报价大写与小写不一致",
+      "located": "投标函",
+      "detail": "报价大写或小写缺失，无法核验一致性"
+     },
+     {
+      "code": "R12_文件签署或盖章页缺失",
+      "located": "签署页",
+      "detail": "缺少签署或盖章页"
+     }
+    ]
+   }
+  },
+  "商务标|污水处理厂提标改造": {
+   "draft_id": "DRAFT-6F6B93E7B114",
+   "keyword": "污水处理厂提标改造",
+   "template": "商务标",
+   "blocked": false,
+   "status": "verified",
+   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
+   "generated_by": "小陈",
+   "sections": [
+    {
+     "heading": "第一章 投标人基本情况",
+     "text": "我公司为依法注册的环保工程企业，具备环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅），并持有安全生产许可证（湖北省住房和城乡建设厅颁发，有效期至 2025 年 03 月，证书编号 （鄂）JZ安许证字[2022]xxxxxx）、ISO9001 质量管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124Q30xxxR0M）、ISO14001 环境管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124E30xxxR0M）、高新技术企业证书（湖北省科学技术厅颁发，有效期至 2023 年 12 月，证书编号 GR20234200xxxx）。上述资质证书均在有效期内，投标时可提供原件核验。"
+    },
+    {
+     "heading": "第二章 类似工程业绩",
+     "text": "近年我公司完成的同类工程业绩包括某某镇污水处理厂提标改造工程（2022 年 08 月，建设单位 某某镇人民政府）（合同号 HBJM-2022-052）、某某村分散式污水处理设施建设（2024 年 03 月，建设单位 某某乡人民政府）（合同号 HBJM-2024-021）、某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）。以上项目均已竣工并通过建设单位验收，可提供合同及验收证明。"
+    },
+    {
+     "heading": "第三章 技术能力与知识产权",
+     "text": "我公司在环保治理领域持续投入研发，已获授权专利包括一种污水处理用高效沉淀池（2022 年授权，国家知识产权局，专利号 ZL202211xxxxxx.5）、一种风光互补供电的污水处理系统（2023 年授权，国家知识产权局，专利号 ZL202310xxxxxx.2）、一种农村生活污水一体化处理装置（2021 年授权，国家知识产权局，专利号 ZL202110xxxxxx.1）。上述专利均为自主申请，权属清晰无争议。"
+    }
+   ],
+   "citations": [
+    {
+     "fact_id": "QUAL-001",
+     "start": 18,
+     "end": 48,
+     "rendered": "环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅）",
+     "kind": "qualification",
+     "title": "环境工程（水污染防治）设计专项乙级",
+     "evidence_uri": "minio://aibid-evidence/demo/QUAL-001.pdf",
+     "issued_at": "2021-06-30"
+    },
+    {
+     "fact_id": "CERT-004",
+     "start": 52,
+     "end": 118,
+     "rendered": "安全生产许可证（湖北省住房和城乡建设厅颁发，有效期至 2025 年 03 月，证书编号 （鄂）JZ安许证字[2022]xxxxxx）",
+     "kind": "certificate",
+     "title": "安全生产许可证",
+     "evidence_uri": "minio://aibid-evidence/demo/CERT-004.pdf",
+     "issued_at": "2025-03-31"
+    },
+    {
+     "fact_id": "CERT-002",
+     "start": 119,
+     "end": 187,
+     "rendered": "ISO9001 质量管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124Q30xxxR0M）",
+     "kind": "certificate",
+     "title": "ISO9001 质量管理体系认证证书",
+     "evidence_uri": "minio://aibid-evidence/demo/CERT-002.pdf",
+     "issued_at": "2024-05-31"
+    },
+    {
+     "fact_id": "CERT-003",
+     "start": 188,
+     "end": 257,
+     "rendered": "ISO14001 环境管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124E30xxxR0M）",
+     "kind": "certificate",
+     "title": "ISO14001 环境管理体系认证证书",
+     "evidence_uri": "minio://aibid-evidence/demo/CERT-003.pdf",
+     "issued_at": "2024-05-31"
+    },
+    {
+     "fact_id": "CERT-001",
+     "start": 258,
+     "end": 315,
+     "rendered": "高新技术企业证书（湖北省科学技术厅颁发，有效期至 2023 年 12 月，证书编号 GR20234200xxxx）",
+     "kind": "certificate",
+     "title": "高新技术企业证书",
+     "evidence_uri": "minio://aibid-evidence/demo/CERT-001.pdf",
+     "issued_at": "2023-12-31"
+    },
+    {
+     "fact_id": "PRJ-003",
+     "start": 357,
+     "end": 416,
+     "rendered": "某某镇污水处理厂提标改造工程（2022 年 08 月，建设单位 某某镇人民政府）（合同号 HBJM-2022-052）",
+     "kind": "project",
+     "title": "某某镇污水处理厂提标改造工程",
+     "evidence_uri": "minio://aibid-evidence/demo/PRJ-003.pdf",
+     "issued_at": "2022-08-09"
+    },
+    {
+     "fact_id": "PRJ-006",
+     "start": 417,
+     "end": 476,
+     "rendered": "某某村分散式污水处理设施建设（2024 年 03 月，建设单位 某某乡人民政府）（合同号 HBJM-2024-021）",
+     "kind": "project",
+     "title": "某某村分散式污水处理设施建设",
+     "evidence_uri": "minio://aibid-evidence/demo/PRJ-006.pdf",
+     "issued_at": "2024-03-12"
+    },
+    {
+     "fact_id": "PRJ-001",
+     "start": 477,
+     "end": 543,
+     "rendered": "某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）",
+     "kind": "project",
+     "title": "某某县农村生活污水治理工程（一期）",
+     "evidence_uri": "minio://aibid-evidence/demo/PRJ-001.pdf",
+     "issued_at": "2021-10-15"
+    },
+    {
+     "fact_id": "PAT-006",
+     "start": 599,
+     "end": 650,
+     "rendered": "一种污水处理用高效沉淀池（2022 年授权，国家知识产权局，专利号 ZL202211xxxxxx.5）",
+     "kind": "patent",
+     "title": "一种污水处理用高效沉淀池",
+     "evidence_uri": "minio://aibid-evidence/demo/PAT-006.pdf",
+     "issued_at": "2022-11-25"
+    },
+    {
+     "fact_id": "PAT-004",
+     "start": 651,
+     "end": 705,
+     "rendered": "一种风光互补供电的污水处理系统（2023 年授权，国家知识产权局，专利号 ZL202310xxxxxx.2）",
+     "kind": "patent",
+     "title": "一种风光互补供电的污水处理系统",
+     "evidence_uri": "minio://aibid-evidence/demo/PAT-004.pdf",
+     "issued_at": "2023-01-06"
+    },
+    {
+     "fact_id": "PAT-001",
+     "start": 706,
+     "end": 760,
+     "rendered": "一种农村生活污水一体化处理装置（2021 年授权，国家知识产权局，专利号 ZL202110xxxxxx.1）",
+     "kind": "patent",
+     "title": "一种农村生活污水一体化处理装置",
+     "evidence_uri": "minio://aibid-evidence/demo/PAT-001.pdf",
+     "issued_at": "2021-05-18"
+    }
+   ],
+   "reasons": [],
+   "risk": {
+    "coverage": 1.0,
+    "checked": 12,
+    "findings": [
+     {
+      "code": "R10_报价大写与小写不一致",
+      "located": "投标函",
+      "detail": "报价大写或小写缺失，无法核验一致性"
+     },
+     {
+      "code": "R12_文件签署或盖章页缺失",
+      "located": "签署页",
+      "detail": "缺少签署或盖章页"
+     }
+    ]
+   }
+  },
+  "技术标|河道生态修复": {
+   "draft_id": "DRAFT-09E4F49BA8B8",
+   "keyword": "河道生态修复",
+   "template": "技术标",
+   "blocked": false,
+   "status": "verified",
+   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
+   "generated_by": "小陈",
+   "sections": [
+    {
+     "heading": "第一章 项目理解与总体思路",
+     "text": "本次招标项目与我公司主业高度契合。结合我方在某某县河道生态修复工程（2019 年 12 月，建设单位 某某县水利和湖泊局）（合同号 HBJM-2019-061）中积累的工程经验，拟按现行技术规范编制本技术方案。"
+    },
+    {
+     "heading": "第二章 工艺路线与关键技术",
+     "text": "针对本项目的治理目标，我方采用以一种河道生态护坡结构（2019 年授权，国家知识产权局，专利号 ZL201910xxxxxx.9）为核心的工艺路线，该技术在同类项目中已有实际应用验证，处理效果稳定可达标。"
+    },
+    {
+     "heading": "第三章 履约能力保障",
+     "text": "我方具备环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅），并已完成某某县河道生态修复工程（2019 年 12 月，建设单位 某某县水利和湖泊局）（合同号 HBJM-2019-061）、某某区农村环境综合整治项目（2023 年 04 月，建设单位 某某区生态环境分局）（合同号 HBJM-2023-008）等工程，人员、设备与资金均可满足本项目工期要求。"
+    }
+   ],
+   "citations": [
+    {
+     "fact_id": "PRJ-005",
+     "start": 22,
+     "end": 80,
+     "rendered": "某某县河道生态修复工程（2019 年 12 月，建设单位 某某县水利和湖泊局）（合同号 HBJM-2019-061）",
+     "kind": "project",
+     "title": "某某县河道生态修复工程",
+     "evidence_uri": "minio://aibid-evidence/demo/PRJ-005.pdf",
+     "issued_at": "2019-12-05"
+    },
+    {
+     "fact_id": "PAT-005",
+     "start": 122,
+     "end": 171,
+     "rendered": "一种河道生态护坡结构（2019 年授权，国家知识产权局，专利号 ZL201910xxxxxx.9）",
+     "kind": "patent",
+     "title": "一种河道生态护坡结构",
+     "evidence_uri": "minio://aibid-evidence/demo/PAT-005.pdf",
+     "issued_at": "2019-07-30"
+    },
+    {
+     "fact_id": "QUAL-001",
+     "start": 213,
+     "end": 243,
+     "rendered": "环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅）",
+     "kind": "qualification",
+     "title": "环境工程（水污染防治）设计专项乙级",
+     "evidence_uri": "minio://aibid-evidence/demo/QUAL-001.pdf",
+     "issued_at": "2021-06-30"
+    },
+    {
+     "fact_id": "PRJ-005",
+     "start": 248,
+     "end": 306,
+     "rendered": "某某县河道生态修复工程（2019 年 12 月，建设单位 某某县水利和湖泊局）（合同号 HBJM-2019-061）",
+     "kind": "project",
+     "title": "某某县河道生态修复工程",
+     "evidence_uri": "minio://aibid-evidence/demo/PRJ-005.pdf",
+     "issued_at": "2019-12-05"
+    },
+    {
+     "fact_id": "PRJ-004",
+     "start": 307,
+     "end": 367,
+     "rendered": "某某区农村环境综合整治项目（2023 年 04 月，建设单位 某某区生态环境分局）（合同号 HBJM-2023-008）",
+     "kind": "project",
+     "title": "某某区农村环境综合整治项目",
+     "evidence_uri": "minio://aibid-evidence/demo/PRJ-004.pdf",
+     "issued_at": "2023-04-20"
+    }
+   ],
+   "reasons": [],
+   "risk": {
+    "coverage": 1.0,
+    "checked": 12,
+    "findings": [
+     {
+      "code": "R10_报价大写与小写不一致",
+      "located": "投标函",
+      "detail": "报价大写或小写缺失，无法核验一致性"
+     },
+     {
+      "code": "R12_文件签署或盖章页缺失",
+      "located": "签署页",
+      "detail": "缺少签署或盖章页"
+     }
+    ]
+   }
+  },
+  "商务标|地铁盾构": {
+   "draft_id": "DRAFT-DB038A3EBB8F",
+   "keyword": "地铁盾构",
+   "template": "商务标",
+   "blocked": true,
+   "status": "blocked",
+   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
+   "generated_by": "小陈",
+   "sections": [],
+   "citations": [],
+   "reasons": [
+    "槽位 projects（类别 project）需要至少 2 条事实，实际只检索到 0 条 —— 拒绝以占位或推测填充"
+   ],
+   "risk": null
+  }
+ },
+ "approved": {
+  "draft_id": "DRAFT-B6A98DC0CF36",
+  "生成人": "小陈",
+  "时间": "2026-09-20T14:00:51.039647+00:00",
+  "数据版本": "SNAP-AC3BC8C4BCDBED8B",
+  "审定人": "王主任",
+  "审定时间": "2026-09-20T14:00:51.052673+00:00",
+  "完整": true
+ },
+ "drafts": [
+  {
+   "draft_id": "DRAFT-B6A98DC0CF36",
+   "keyword": "农村生活污水",
+   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
+   "citations": 12,
+   "审定人": "王主任",
+   "完整": true
+  },
+  {
+   "draft_id": "DRAFT-C367D59CF2E8",
+   "keyword": "农村生活污水",
+   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
+   "citations": 5,
+   "审定人": "",
+   "完整": false
+  },
+  {
+   "draft_id": "DRAFT-6F6B93E7B114",
+   "keyword": "污水处理厂提标改造",
+   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
+   "citations": 11,
+   "审定人": "",
+   "完整": false
+  },
+  {
+   "draft_id": "DRAFT-09E4F49BA8B8",
+   "keyword": "河道生态修复",
+   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
+   "citations": 5,
+   "审定人": "",
+   "完整": false
+  }
+ ],
+ "audit": {
+  "chain_ok": true,
+  "chain_summary": "哈希链完整：共 14 条记录，逐条重算一致",
+  "length": 14,
+  "quadruple_complete": false,
+  "missing": [
+   "DRAFT-09E4F49BA8B8",
+   "DRAFT-6F6B93E7B114",
+   "DRAFT-C367D59CF2E8"
+  ],
+  "records": [
+   {
+    "seq": 0,
+    "ts": "2026-09-20 22:00:51",
+    "actor": "小陈",
+    "action": "draft.generated",
+    "hash": "65861debffee…",
+    "prev": "000000000000…"
+   },
+   {
+    "seq": 1,
+    "ts": "2026-09-20 22:00:51",
+    "actor": "小陈",
+    "action": "draft.verified",
+    "hash": "bd07698e9bb8…",
+    "prev": "65861debffee…"
+   },
+   {
+    "seq": 2,
+    "ts": "2026-09-20 22:00:51",
+    "actor": "小陈",
+    "action": "draft.attested",
+    "hash": "9e5f3594af2d…",
+    "prev": "bd07698e9bb8…"
+   },
+   {
+    "seq": 3,
+    "ts": "2026-09-20 22:00:51",
+    "actor": "小陈",
+    "action": "draft.generated",
+    "hash": "7d947adc891e…",
+    "prev": "9e5f3594af2d…"
+   },
+   {
+    "seq": 4,
+    "ts": "2026-09-20 22:00:51",
+    "actor": "小陈",
+    "action": "draft.verified",
+    "hash": "68609c73cf44…",
+    "prev": "7d947adc891e…"
+   },
+   {
+    "seq": 5,
+    "ts": "2026-09-20 22:00:51",
+    "actor": "小陈",
+    "action": "draft.attested",
+    "hash": "ca00c2947176…",
+    "prev": "68609c73cf44…"
+   },
+   {
+    "seq": 6,
+    "ts": "2026-09-20 22:00:51",
+    "actor": "小陈",
+    "action": "draft.generated",
+    "hash": "eb74564d547d…",
+    "prev": "ca00c2947176…"
+   },
+   {
+    "seq": 7,
+    "ts": "2026-09-20 22:00:51",
+    "actor": "小陈",
+    "action": "draft.verified",
+    "hash": "ae0d606586c8…",
+    "prev": "eb74564d547d…"
+   },
+   {
+    "seq": 8,
+    "ts": "2026-09-20 22:00:51",
+    "actor": "小陈",
+    "action": "draft.attested",
+    "hash": "d03be68f9b2b…",
+    "prev": "ae0d606586c8…"
+   },
+   {
+    "seq": 9,
+    "ts": "2026-09-20 22:00:51",
+    "actor": "小陈",
+    "action": "draft.generated",
+    "hash": "a759b18cfc1f…",
+    "prev": "d03be68f9b2b…"
+   },
+   {
+    "seq": 10,
+    "ts": "2026-09-20 22:00:51",
+    "actor": "小陈",
+    "action": "draft.verified",
+    "hash": "d189fc67a3bc…",
+    "prev": "a759b18cfc1f…"
+   },
+   {
+    "seq": 11,
+    "ts": "2026-09-20 22:00:51",
+    "actor": "小陈",
+    "action": "draft.attested",
+    "hash": "c520ec093a0f…",
+    "prev": "d189fc67a3bc…"
+   },
+   {
+    "seq": 12,
+    "ts": "2026-09-20 22:00:51",
+    "actor": "小陈",
+    "action": "draft.blocked",
+    "hash": "92678c08f80e…",
+    "prev": "c520ec093a0f…"
+   },
+   {
+    "seq": 13,
+    "ts": "2026-09-20 22:00:51",
+    "actor": "王主任",
+    "action": "draft.approved",
+    "hash": "b847468ae560…",
+    "prev": "92678c08f80e…"
+   }
+  ]
+ },
+ "status": {
+  "事实总数": 20,
+  "分类": {
+   "certificate": 5,
+   "patent": 6,
+   "project": 6,
+   "qualification": 3
+  },
+  "数据版本": "SNAP-AC3BC8C4BCDBED8B",
+  "审计记录": 14,
+  "模型适配器": "passthrough",
+  "声明": "本工作台当前载入的是合成演示数据，非公司真实资质业绩。"
+ },
+ "meta": {
+  "模板关键词": [
+   [
+    "商务标",
+    "农村生活污水"
+   ],
+   [
+    "技术标",
+    "农村生活污水"
+   ],
+   [
+    "商务标",
+    "污水处理厂提标改造"
+   ],
+   [
+    "技术标",
+    "河道生态修复"
+   ],
+   [
+    "商务标",
+    "地铁盾构"
+   ]
+  ],
+  "生成人": "小陈",
+  "审定人": "王主任",
+  "source": "scripts/export_static_demo.py 由真实流水线导出"
+ }
+}

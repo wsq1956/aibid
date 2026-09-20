@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIBID 工作台 · 金宝马 AI 投标与方案助手</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  /* 静态演示版附加样式 —— 不动 style.css，保证它与 app/static/style.css 逐字一致 */
+  .demo-strip {
+    background: var(--navy-d); color: #9FB8CC;
+    font-size: 12px; padding: 5px 22px;
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  }
+  .demo-strip .chip {
+    background: var(--teal); color: #fff; font-weight: 700;
+    padding: 1px 8px; border-radius: 20px; font-size: 11px;
+  }
+  .demo-strip a { color: #8FD3E6; }
+</style>
+</head>
+<body>
+
+<div class="demo-strip">
+  <span class="chip">静态演示版</span>
+  <span>本页<b>没有后端服务</b>——研判清单、初稿与审计记录均由本地服务端真实跑出后固化，
+        浏览时不再重新生成。</span>
+  <span>合成演示数据，非公司真实资质业绩。</span>
+</div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">AIBID</span>
+    <span class="sub">金宝马 AI 投标与方案助手</span>
+  </div>
+  <nav class="tabs">
+    <button class="tab active" data-view="opps">今日机会</button>
+    <button class="tab" data-view="gen">标书生成</button>
+    <button class="tab" data-view="facts">资质业绩库</button>
+    <button class="tab" data-view="audit">审计留痕</button>
+  </nav>
+  <div class="status" id="status"></div>
+</header>
+
+<div class="notice" id="notice"></div>
+
+<main>
+
+  <!-- ============================ 今日机会 ============================ -->
+  <section class="view active" id="view-opps">
+    <div class="viewhead">
+      <h2>今日机会清单</h2>
+      <p>三档研判：推荐 / 不推荐 / 待定。<b>缺任何一档，当日验收直接判定不通过</b>（PRD §4.3 零容忍）。</p>
+    </div>
+    <div class="verdictbar" id="verdictbar"></div>
+    <div id="oppsList" class="stack"></div>
+  </section>
+
+  <!-- ============================ 标书生成 ============================ -->
+  <section class="view" id="view-gen">
+    <div class="viewhead">
+      <h2>标书初稿生成</h2>
+      <p>AI 只出初稿、不做决策。每处事实引用都会被<b>确定性回查器</b>逐条核验，
+         不通过即<b>阻断出稿</b>。</p>
+    </div>
+
+    <div class="panel">
+      <div class="controls">
+        <label>标书类型
+          <select id="tpl">
+            <option>商务标</option>
+            <option>技术标</option>
+          </select>
+        </label>
+        <label>项目关键词
+          <input id="kw" list="kwlist" value="农村生活污水" placeholder="如：农村生活污水">
+        </label>
+        <label>生成人
+          <input id="actor" value="小陈" placeholder="姓名">
+        </label>
+        <button class="primary" id="btnGen">生成初稿</button>
+      </div>
+      <datalist id="kwlist"></datalist>
+      <p style="margin:10px 0 0;font-size:12.5px;color:#5B6B7B">
+        静态版预置了若干关键词与模板组合的<b>真实生成结果</b>，点输入框可下拉选择。
+        填入其他关键词将返回「阻断」——静态版无后端可检索，与真实系统的
+        fail-closed 行为一致：<b>查不到事实就不出稿</b>。
+        回放的是导出时的记录，故「生成人」填什么都不改变结果。
+      </p>
+    </div>
+
+    <div id="genResult"></div>
+  </section>
+
+  <!-- ============================ 资质业绩库 ============================ -->
+  <section class="view" id="view-facts">
+    <div class="viewhead">
+      <h2>资质业绩库</h2>
+      <p>事实<b>入库后不可修改</b>，只能新增版本 —— 由数据库触发器强制，
+         防止有人事后偷改业绩去投标。</p>
+    </div>
+    <div class="filter" id="factFilter"></div>
+    <div id="factsList" class="stack"></div>
+  </section>
+
+  <!-- ============================ 审计留痕 ============================ -->
+  <section class="view" id="view-audit">
+    <div class="viewhead">
+      <h2>审计留痕</h2>
+      <p>哈希链 append-only：<b>改动任意一条记录，其后全部失配</b>。
+         审计方可脱离本系统独立重算。</p>
+    </div>
+    <div id="auditSummary"></div>
+    <div class="panel">
+      <h3>已生成初稿</h3>
+      <div id="draftsList"></div>
+    </div>
+    <div class="panel">
+      <h3>审计日志（末 60 条）</h3>
+      <div id="auditLog"></div>
+    </div>
+  </section>
+
+</main>
+
+<div class="modal" id="modal">
+  <div class="modalbox">
+    <button class="closer" id="modalClose">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- 顺序要紧：先备好数据、再装好 fetch 垫片，最后才加载 app.js。
+     app.js 与线上版逐字相同 —— 演示版没有改一行业务代码。 -->
+<script src="demo-data.js"></script>
+<script src="demo-api.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
