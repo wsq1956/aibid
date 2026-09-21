@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AIBID 工作台 · 金宝马 AI 投标与方案助手</title>
+<title>AIBID 投标小助手 · 金宝马环保</title>
 <style>
-/* AIBID 工作台 · 样式
+/* AIBID 投标小助手 · 样式
    配色沿用项目既有设计令牌（深靛蓝主色 + 青蓝/橙作强调），
-   与交付的 PPT、架构图保持一致。 */
+   与交付的 PPT、架构图、工作台保持一致。 */
 
 :root {
   --navy: #0F3D5C;
@@ -30,8 +30,8 @@
 
 body {
   margin: 0;
-  font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Noto Sans CJK SC",
-               "WenQuanYi Micro Hei", sans-serif;
+  font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "HarmonyOS Sans SC",
+               "Noto Sans CJK SC", "WenQuanYi Micro Hei", sans-serif;
   background: var(--bg);
   color: var(--dark);
   font-size: 14px;
@@ -49,22 +49,21 @@ body {
 .brand { display: flex; align-items: baseline; gap: 10px; }
 .logo { font-size: 21px; font-weight: 700; letter-spacing: 1px; }
 .sub { font-size: 12px; color: #B8CCDC; }
-.tabs { display: flex; gap: 4px; margin-left: auto; }
+.tabs { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
 .tab {
   background: transparent; border: 0; color: #B8CCDC;
-  padding: 8px 16px; border-radius: 6px; cursor: pointer;
+  padding: 8px 14px; border-radius: 6px; cursor: pointer;
   font-size: 14px; font-family: inherit; transition: .15s;
 }
 .tab:hover { background: rgba(255,255,255,.08); color: var(--white); }
 .tab.active { background: var(--navy-l); color: var(--white); font-weight: 600; }
-.status { font-size: 12px; color: #B8CCDC; white-space: nowrap; }
-
-/* ------------------------------------------------------------ 声明条 */
-.notice {
-  background: #FDF3E7; color: #8A5A22;
-  border-bottom: 1px solid #F0DCC0;
-  padding: 7px 22px; font-size: 12.5px;
+.tab .step {
+  display: inline-block; width: 17px; height: 17px; line-height: 17px;
+  border-radius: 50%; background: rgba(255,255,255,.18);
+  font-size: 11px; text-align: center; margin-right: 5px;
 }
+.tab.active .step { background: var(--orange); }
+.tab .done { background: var(--green); }
 
 main { padding: 22px; max-width: 1180px; margin: 0 auto; }
 .view { display: none; }
@@ -79,8 +78,32 @@ main { padding: 22px; max-width: 1180px; margin: 0 auto; }
   border-radius: 8px; padding: 16px; margin-bottom: 16px;
 }
 .panel h3 { margin: 0 0 12px; font-size: 15px; color: var(--navy); }
+.panel h4 { margin: 16px 0 6px; font-size: 14px; color: var(--navy-l); }
 
 .stack { display: flex; flex-direction: column; gap: 10px; }
+
+/* ------------------------------------------------------------ 顶部进度条 */
+.progress {
+  display: flex; gap: 0; align-items: stretch;
+  background: var(--navy-d); padding: 8px 22px; gap: 6px;
+  font-size: 12px; color: #9FB8CC; flex-wrap: wrap;
+}
+.progress .p {
+  display: flex; align-items: center; gap: 6px;
+  padding: 3px 12px; border-radius: 20px; background: rgba(255,255,255,.06);
+}
+.progress .p.now { background: var(--teal); color: #fff; font-weight: 600; }
+.progress .p.ok { background: rgba(62,168,111,.25); color: #9BE0BC; }
+
+/* ------------------------------------------------------------ 拖放区 */
+.drop {
+  border: 2px dashed var(--border); border-radius: 10px;
+  padding: 26px 20px; text-align: center; cursor: pointer;
+  background: var(--bg); transition: .15s;
+}
+.drop:hover, .drop.over { border-color: var(--teal); background: #EAF6F9; }
+.drop .big { font-size: 15px; color: var(--navy); font-weight: 600; }
+.drop .hint { font-size: 12.5px; color: var(--gray); margin-top: 6px; }
 
 /* ------------------------------------------------------------ 控件 */
 .controls { display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap; }
@@ -88,13 +111,16 @@ main { padding: 22px; max-width: 1180px; margin: 0 auto; }
   display: flex; flex-direction: column; gap: 5px;
   font-size: 12.5px; color: var(--gray); font-weight: 600;
 }
-input, select {
+input, select, textarea {
   font-family: inherit; font-size: 14px;
   padding: 8px 10px; border: 1px solid var(--border);
   border-radius: 6px; background: var(--white); color: var(--dark);
   min-width: 170px;
 }
-input:focus, select:focus { outline: 2px solid var(--teal); outline-offset: -1px; }
+textarea { width: 100%; min-height: 150px; line-height: 1.7; resize: vertical; }
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--teal); outline-offset: -1px;
+}
 button {
   font-family: inherit; font-size: 14px; cursor: pointer;
   padding: 9px 18px; border-radius: 6px;
@@ -107,93 +133,20 @@ button.primary {
   font-weight: 600;
 }
 button.primary:hover { background: var(--navy-l); color: var(--white); }
-button:disabled { opacity: .5; cursor: not-allowed; }
+button.ghost { background: transparent; }
+button.danger { color: var(--red); border-color: #E8C4C0; }
+button.danger:hover { background: #FAF0EF; border-color: var(--red); color: var(--red); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button:disabled:hover { border-color: var(--border); color: var(--dark); }
+.btnrow { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
-/* ------------------------------------------------------------ 机会卡片 */
-.verdictbar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
-.vchip {
-  border-radius: 8px; padding: 10px 18px; border: 1px solid var(--border);
-  background: var(--white); min-width: 130px;
-}
-.vchip .n { font-size: 22px; font-weight: 700; line-height: 1.2; }
-.vchip .l { font-size: 12px; color: var(--gray); }
-.vchip.miss { border-color: var(--red); background: #FAF0EF; }
+/* ------------------------------------------------------------ 键值表 */
+.kv { display: grid; grid-template-columns: 110px 1fr; gap: 8px 12px; font-size: 13px; }
+.kv .k { color: var(--gray); font-weight: 600; padding-top: 4px; }
+.kv .v { color: var(--dark); word-break: break-all; }
+.kv input { width: 100%; min-width: 0; }
 
-.opp {
-  background: var(--white); border: 1px solid var(--border);
-  border-left: 4px solid var(--gray-l);
-  border-radius: 8px; padding: 14px 16px;
-}
-.opp.推荐 { border-left-color: var(--green); }
-.opp.不推荐 { border-left-color: var(--gray-l); }
-.opp.待定 { border-left-color: var(--orange); }
-.opp .row1 { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.opp .title { font-weight: 600; font-size: 15px; color: var(--navy); }
-.opp .score { font-size: 12px; color: var(--gray-l); }
-.badge {
-  font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 20px;
-  color: var(--white);
-}
-.badge.推荐 { background: var(--green); }
-.badge.不推荐 { background: var(--gray-l); }
-.badge.待定 { background: var(--orange); }
-.opp .reason { color: var(--gray); font-size: 13px; margin-top: 6px; }
-.opp .matched { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
-.tag {
-  font-size: 12px; padding: 2px 9px; border-radius: 4px;
-  background: var(--bg2); color: var(--navy-l); border: 1px solid var(--border);
-}
-
-/* ------------------------------------------------------------ 生成结果 */
-.result-head {
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-.pill {
-  font-size: 12.5px; font-weight: 700; padding: 4px 12px; border-radius: 20px;
-}
-.pill.ok { background: #E7F5EC; color: var(--green); }
-.pill.bad { background: #FAF0EF; color: var(--red); }
-
-.draft {
-  background: var(--white); border: 1px solid var(--border);
-  border-radius: 8px; padding: 20px 24px;
-}
-.draft h4 {
-  margin: 18px 0 8px; font-size: 15px; color: var(--navy);
-  padding-bottom: 6px; border-bottom: 1px solid var(--border);
-}
-.draft h4:first-child { margin-top: 0; }
-.draft p { margin: 0; line-height: 1.9; text-align: justify; }
-
-/* 引用高亮 —— 本应用的核心视觉：每处事实都可点开溯源 */
-.cite {
-  background: #EAF6F9; border-bottom: 2px solid var(--teal);
-  padding: 1px 2px; border-radius: 3px; cursor: pointer;
-  transition: .12s;
-}
-.cite:hover { background: #D3EDF4; }
-
-.blockedbox {
-  background: #FAF0EF; border: 1px solid var(--red);
-  border-left: 5px solid var(--red);
-  border-radius: 8px; padding: 16px 20px; margin-bottom: 14px;
-}
-.blockedbox h3 { color: var(--red); margin: 0 0 8px; font-size: 15px; }
-.blockedbox ul { margin: 8px 0 0; padding-left: 20px; color: #7A3B36; }
-.blockedbox li { margin-bottom: 4px; font-size: 13px; }
-
-.riskbox {
-  background: #FDF7EE; border: 1px solid #F0DCC0;
-  border-radius: 8px; padding: 14px 18px; margin-top: 14px;
-}
-.riskbox h3 { color: #8A5A22; margin: 0 0 8px; font-size: 14px; }
-.riskbox .ok { color: var(--green); font-weight: 600; }
-
-/* ------------------------------------------------------------ 事实库 */
-.filter { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
-.filter button.on { background: var(--navy); color: var(--white); border-color: var(--navy); }
-
+/* ------------------------------------------------------------ 事实卡 */
 .fact {
   background: var(--white); border: 1px solid var(--border);
   border-radius: 8px; padding: 12px 16px;
@@ -205,33 +158,81 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 }
 .fact .ttl { font-weight: 600; color: var(--navy); }
 .fact .meta { color: var(--gray); font-size: 12.5px; margin-top: 5px; }
-.fact .rendered {
+.fact .raw {
   margin-top: 7px; padding: 8px 12px; background: var(--bg);
   border-left: 3px solid var(--teal); border-radius: 4px;
-  font-size: 13px; color: var(--dark);
+  font-size: 13px; color: var(--dark); line-height: 1.75;
 }
+.fact .src { color: var(--gray-l); font-size: 12px; margin-top: 5px; }
 
-/* ------------------------------------------------------------ 审计 */
-.summary { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-.sum {
+.tag {
+  font-size: 12px; padding: 2px 9px; border-radius: 4px;
+  background: var(--bg2); color: var(--navy-l); border: 1px solid var(--border);
+}
+.tag.q { background: #EAF3FA; color: #1E5E86; }
+.tag.c { background: #EAF6F9; color: #26808F; }
+.tag.p { background: #F3EEF9; color: #6B4E9E; }
+.tag.j { background: #E7F5EC; color: #2E7D52; }
+.tag.m { background: #FDF3E7; color: #8A5A22; }
+
+/* ------------------------------------------------------------ 标书正文 */
+.draft {
   background: var(--white); border: 1px solid var(--border);
-  border-radius: 8px; padding: 12px 18px; min-width: 150px;
+  border-radius: 8px; padding: 20px 24px;
 }
-.sum .n { font-size: 20px; font-weight: 700; color: var(--navy); }
-.sum .l { font-size: 12px; color: var(--gray); }
-.sum.ok { border-color: var(--green); }
-.sum.ok .n { color: var(--green); }
-.sum.bad { border-color: var(--red); }
-.sum.bad .n { color: var(--red); }
+.draft h4 {
+  margin: 18px 0 8px; font-size: 15px; color: var(--navy);
+  padding-bottom: 6px; border-bottom: 1px solid var(--border);
+}
+.draft h4:first-child { margin-top: 0; }
+.draft p { margin: 0 0 6px; line-height: 1.95; text-align: justify; }
 
+/* 引用高亮 —— 核心视觉：每处事实都能点开看它出自哪一行 */
+.cite {
+  background: #EAF6F9; border-bottom: 2px solid var(--teal);
+  padding: 1px 2px; border-radius: 3px; cursor: pointer;
+  transition: .12s;
+}
+.cite:hover { background: #D3EDF4; }
+
+.result-head {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.pill { font-size: 12.5px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+.pill.ok { background: #E7F5EC; color: var(--green); }
+.pill.bad { background: #FAF0EF; color: var(--red); }
+
+.blockedbox {
+  background: #FAF0EF; border: 1px solid var(--red);
+  border-left: 5px solid var(--red);
+  border-radius: 8px; padding: 16px 20px; margin-bottom: 14px;
+}
+.blockedbox h3 { color: var(--red); margin: 0 0 8px; font-size: 15px; }
+.blockedbox ul { margin: 8px 0 0; padding-left: 20px; color: #7A3B36; }
+.blockedbox li { margin-bottom: 4px; font-size: 13px; }
+
+.noticebox {
+  background: #EAF6F9; border: 1px solid #C4E2EC;
+  border-radius: 8px; padding: 12px 16px; margin-bottom: 14px;
+  font-size: 13px; color: #1E5E86;
+}
+.warnbox {
+  background: #FDF3E7; border: 1px solid #F0DCC0;
+  border-radius: 8px; padding: 12px 16px; margin-bottom: 14px;
+  font-size: 13px; color: #8A5A22;
+}
+
+/* ------------------------------------------------------------ 表格 */
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th {
   text-align: left; padding: 8px 10px; background: var(--navy);
   color: var(--white); font-weight: 600; font-size: 12.5px;
 }
-td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
+td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
 tr:nth-child(even) td { background: var(--bg); }
 .mono { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: var(--gray); }
+td input { min-width: 0; width: 100%; font-size: 13px; padding: 5px 8px; }
 
 /* ------------------------------------------------------------ 弹窗 */
 .modal {
@@ -242,7 +243,7 @@ tr:nth-child(even) td { background: var(--bg); }
 .modal.open { display: flex; }
 .modalbox {
   background: var(--white); border-radius: 10px; padding: 24px 26px;
-  max-width: 560px; width: 100%; max-height: 80vh; overflow: auto;
+  max-width: 620px; width: 100%; max-height: 82vh; overflow: auto;
   position: relative;
 }
 .closer {
@@ -251,9 +252,6 @@ tr:nth-child(even) td { background: var(--bg); }
   padding: 4px 8px;
 }
 .modalbox h3 { margin: 0 0 14px; color: var(--navy); font-size: 16px; }
-.kv { display: grid; grid-template-columns: 96px 1fr; gap: 8px 12px; font-size: 13px; }
-.kv .k { color: var(--gray); font-weight: 600; }
-.kv .v { color: var(--dark); word-break: break-all; }
 .quote {
   margin-top: 14px; padding: 12px 14px; background: var(--bg);
   border-left: 3px solid var(--teal); border-radius: 4px; line-height: 1.8;
@@ -261,121 +259,173 @@ tr:nth-child(even) td { background: var(--bg); }
 
 .empty { color: var(--gray-l); text-align: center; padding: 30px; font-size: 13px; }
 .spin { color: var(--teal); font-size: 13px; padding: 10px 0; }
+.ok { color: var(--green); font-weight: 600; }
+.bad { color: var(--red); font-weight: 600; }
 
-</style>
-<style>
-  /* 静态演示版附加样式 —— 不动 style.css，保证它与 app/static/style.css 逐字一致 */
-  .demo-strip {
-    background: var(--navy-d); color: #9FB8CC;
-    font-size: 12px; padding: 5px 22px;
-    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+/* ------------------------------------------------------------ 打印（存为 PDF）
+ * 不用 window.open 另起窗口 —— 那会被浏览器当成弹窗拦掉。
+ * 改为把正文搬进 #printArea，打印时只显示它。 */
+#printArea { display: none; }
+
+@media print {
+  @page { size: A4; margin: 2.5cm 2.2cm; }
+  body { background: #fff; }
+  body.printing .topbar,
+  body.printing .progress,
+  body.printing #notice,
+  body.printing main,
+  body.printing .modal { display: none !important; }
+  body.printing #printArea {
+    display: block !important;
+    font-family: "仿宋", "FangSong", "SimSun", serif;
+    font-size: 12pt; line-height: 1.7; color: #000;
   }
-  .demo-strip .chip {
-    background: var(--teal); color: #fff; font-weight: 700;
-    padding: 1px 8px; border-radius: 20px; font-size: 11px;
+  body.printing #printArea h1 {
+    font-family: "黑体", "SimHei", sans-serif; font-size: 18pt;
+    text-align: center; margin: 0 0 6pt;
   }
-  .demo-strip a { color: #8FD3E6; }
+  body.printing #printArea h2 {
+    font-family: "黑体", "SimHei", sans-serif; font-size: 14pt;
+    margin: 16pt 0 8pt; page-break-after: avoid;
+  }
+  body.printing #printArea p { margin: 0 0 6pt; text-indent: 2em; text-align: justify; }
+  /* 打印时引用标记去掉底色，只留下划线（留痕版），净版本就无标记 */
+  #printArea .cite { background: none; border-bottom: 1px solid #000; }
+}
+
 </style>
 </head>
 <body>
 
-<div class="demo-strip">
-  <span class="chip">静态演示版</span>
-  <span>本页<b>没有后端服务</b>——研判清单、初稿与审计记录均由本地服务端真实跑出后固化，
-        浏览时不再重新生成。</span>
-  <span>合成演示数据，非公司真实资质业绩。</span>
-</div>
-
 <header class="topbar">
   <div class="brand">
     <span class="logo">AIBID</span>
-    <span class="sub">金宝马 AI 投标与方案助手</span>
+    <span class="sub">投标小助手 · 招标文件 → 公司资料 → 投标文件</span>
   </div>
   <nav class="tabs">
-    <button class="tab active" data-view="opps">今日机会</button>
-    <button class="tab" data-view="gen">标书生成</button>
-    <button class="tab" data-view="facts">资质业绩库</button>
+    <button class="tab active" data-view="tender"><span class="step" id="s1">1</span>招标文件</button>
+    <button class="tab" data-view="company"><span class="step" id="s2">2</span>公司资料</button>
+    <button class="tab" data-view="gen"><span class="step" id="s3">3</span>生成投标文件</button>
     <button class="tab" data-view="audit">审计留痕</button>
   </nav>
-  <div class="status" id="status"></div>
 </header>
 
-<div class="notice" id="notice"></div>
+<div class="progress">
+  <div class="p" id="p1">① 上传招标文件</div>
+  <div class="p" id="p2">② 上传公司资料</div>
+  <div class="p" id="p3">③ 生成并导出</div>
+  <div class="p" id="p4">审计留痕（哈希链）</div>
+</div>
 
 <main>
 
-  <!-- ============================ 今日机会 ============================ -->
-  <section class="view active" id="view-opps">
+  <!-- ============================ ① 招标文件 ============================ -->
+  <section class="view active" id="view-tender">
     <div class="viewhead">
-      <h2>今日机会清单</h2>
-      <p>三档研判：推荐 / 不推荐 / 待定。<b>缺任何一档，当日验收直接判定不通过</b>（PRD §4.3 零容忍）。</p>
+      <h2>第一步 · 上传招标文件</h2>
+      <p>把招标文件拖进来，自动读出<b>项目名称、招标人、资质要求、业绩要求</b>等要素。
+         读得对不对你可以在下方直接改 —— <b>这一步的产出是后面所有内容的依据</b>。</p>
     </div>
-    <div class="verdictbar" id="verdictbar"></div>
-    <div id="oppsList" class="stack"></div>
+
+    <div class="panel">
+      <div class="drop" id="tenderDrop">
+        <div class="big">把招标文件拖到这里，或点击选择</div>
+        <div class="hint">支持 .txt / .md / .docx ／ .pdf（尽力而为）／ .doc 请先另存为 docx</div>
+        <input type="file" id="tenderFile" hidden accept=".txt,.md,.markdown,.docx,.pdf,.doc">
+      </div>
+      <div class="btnrow" style="margin-top:12px">
+        <button id="tenderPasteBtn">或者，直接粘贴文字</button>
+        <button class="ghost" id="tenderClearBtn">清空重来</button>
+        <span id="tenderInfo" style="color:#5B6B7B;font-size:12.5px"></span>
+      </div>
+      <div id="tenderPasteWrap" style="display:none;margin-top:12px">
+        <textarea id="tenderPaste" placeholder="把招标文件的正文粘贴到这里（从 Word/PDF 里直接复制即可）…"></textarea>
+        <div class="btnrow" style="margin-top:8px">
+          <button class="primary" id="tenderPasteGo">用这段文字</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="tenderResult"></div>
   </section>
 
-  <!-- ============================ 标书生成 ============================ -->
+  <!-- ============================ ② 公司资料 ============================ -->
+  <section class="view" id="view-company">
+    <div class="viewhead">
+      <h2>第二步 · 上传公司资料</h2>
+      <p>把资质证书、专利证书、业绩清单等材料拖进来（可多选）。系统按规则从中
+         抽取出<b>事实条目</b>，每条都保留<b>原文逐字</b>与出处行号 ——
+         后面写进标书的每个字都会回到这里核对。</p>
+    </div>
+
+    <div class="panel">
+      <div class="drop" id="coDrop">
+        <div class="big">把公司资料拖到这里，或点击选择（可多选）</div>
+        <div class="hint">支持 .txt / .md / .docx ／ .pdf（尽力而为）</div>
+        <input type="file" id="coFile" hidden multiple accept=".txt,.md,.markdown,.docx,.pdf,.doc">
+      </div>
+      <div class="btnrow" style="margin-top:12px">
+        <button id="coPasteBtn">或者，直接粘贴文字</button>
+        <button class="primary" id="coExtractBtn">从资料里抽取事实</button>
+        <button class="ghost" id="coClearBtn">清空事实库</button>
+        <span id="coInfo" style="color:#5B6B7B;font-size:12.5px"></span>
+      </div>
+      <div id="coPasteWrap" style="display:none;margin-top:12px">
+        <textarea id="coPaste" placeholder="把公司资料文字粘贴到这里，一行一条最好（例如：环保工程专业承包壹级，湖北省住房和城乡建设厅，2020年11月）…"></textarea>
+      </div>
+    </div>
+
+    <div id="coResult"></div>
+  </section>
+
+  <!-- ============================ ③ 生成投标文件 ============================ -->
   <section class="view" id="view-gen">
     <div class="viewhead">
-      <h2>标书初稿生成</h2>
-      <p>AI 只出初稿、不做决策。每处事实引用都会被<b>确定性回查器</b>逐条核验，
-         不通过即<b>阻断出稿</b>。</p>
+      <h2>第三步 · 生成并导出投标文件</h2>
+      <p>由程序把事实库里的原文<b>逐字拼接</b>成初稿 —— 不经任何模型改写。
+         每处引用都可以点开，看到它出自哪个文件的哪一行。
+         <b>缺哪一类事实就拒绝出稿</b>，不拿占位文字凑数。</p>
     </div>
 
     <div class="panel">
       <div class="controls">
-        <label>标书类型
-          <select id="tpl">
-            <option>商务标</option>
-            <option>技术标</option>
-          </select>
+        <label>投标人名称
+          <input id="bidder" value="湖北金宝马环保科技有限公司">
         </label>
-        <label>项目关键词
-          <input id="kw" list="kwlist" value="农村生活污水" placeholder="如：农村生活污水">
+        <label>编制人
+          <input id="actor" value="小陈">
         </label>
-        <label>生成人
-          <input id="actor" value="小陈" placeholder="姓名">
-        </label>
-        <button class="primary" id="btnGen">生成初稿</button>
       </div>
-      <datalist id="kwlist"></datalist>
-      <p style="margin:10px 0 0;font-size:12.5px;color:#5B6B7B">
-        静态版预置了若干关键词与模板组合的<b>真实生成结果</b>，点输入框可下拉选择。
-        填入其他关键词将返回「阻断」——静态版无后端可检索，与真实系统的
-        fail-closed 行为一致：<b>查不到事实就不出稿</b>。
-        回放的是导出时的记录，故「生成人」填什么都不改变结果。
-      </p>
+      <div class="btnrow" style="margin-top:14px">
+        <button class="primary" id="genBtn">生成投标文件初稿</button>
+        <span style="color:#5B6B7B;font-size:12.5px">生成后可选「留痕版」「净版」，并可导出 Word / Markdown / PDF</span>
+      </div>
     </div>
 
     <div id="genResult"></div>
-  </section>
-
-  <!-- ============================ 资质业绩库 ============================ -->
-  <section class="view" id="view-facts">
-    <div class="viewhead">
-      <h2>资质业绩库</h2>
-      <p>事实<b>入库后不可修改</b>，只能新增版本 —— 由数据库触发器强制，
-         防止有人事后偷改业绩去投标。</p>
-    </div>
-    <div class="filter" id="factFilter"></div>
-    <div id="factsList" class="stack"></div>
   </section>
 
   <!-- ============================ 审计留痕 ============================ -->
   <section class="view" id="view-audit">
     <div class="viewhead">
       <h2>审计留痕</h2>
-      <p>哈希链 append-only：<b>改动任意一条记录，其后全部失配</b>。
-         审计方可脱离本系统独立重算。</p>
+      <p>每一次上传、抽取、生成都在本机追加一条记录，<b>哈希链相连</b>：
+         改动任意一条，其后全部失配。</p>
     </div>
     <div id="auditSummary"></div>
     <div class="panel">
-      <h3>已生成初稿</h3>
-      <div id="draftsList"></div>
-    </div>
-    <div class="panel">
-      <h3>审计日志（末 60 条）</h3>
+      <h3>记录（新→旧）</h3>
       <div id="auditLog"></div>
+    </div>
+    <div class="panel noprint">
+      <h3>数据存放</h3>
+      <p style="margin:0;font-size:13px;color:#5B6B7B">
+        本工具<b>没有后端</b>，全部数据存在你这台设备的浏览器本地存储里（localStorage），
+        不会上传到任何服务器。换浏览器或清理浏览器数据会丢失，重要内容请及时导出。
+      </p>
+      <div class="btnrow" style="margin-top:12px">
+        <button class="danger" id="wipeBtn">清空全部数据</button>
+      </div>
     </div>
   </section>
 
@@ -388,1245 +438,41 @@ tr:nth-child(even) td { background: var(--bg); }
   </div>
 </div>
 
-<!-- 顺序要紧：先备好数据、再装好 fetch 垫片，最后才加载 app.js。
-     app.js 与线上版逐字相同 —— 演示版没有改一行业务代码。 -->
 <script>
-/* AIBID 静态演示数据 —— 由 scripts/export_static_demo.py 自动生成。
- * 内容为真实流水线跑出的合成演示数据，非公司真实资质业绩。
- * 请勿手工编辑；要改请改导出脚本后重跑。 */
-window.DEMO_DATA = {
- "facts": [
-  {
-   "fact_id": "CERT-001",
-   "kind": "certificate",
-   "kind_label": "资质证书",
-   "title": "高新技术企业证书",
-   "issued_at": "2023-12-31",
-   "issuer": "湖北省科学技术厅",
-   "ref_no": "GR20234200xxxx",
-   "version": 1,
-   "rendered": "高新技术企业证书（湖北省科学技术厅颁发，有效期至 2023 年 12 月，证书编号 GR20234200xxxx）",
-   "evidence_uri": "minio://aibid-evidence/demo/CERT-001.pdf",
-   "evidence_sha": "ae8e0b176ebace72…"
-  },
-  {
-   "fact_id": "CERT-002",
-   "kind": "certificate",
-   "kind_label": "资质证书",
-   "title": "ISO9001 质量管理体系认证证书",
-   "issued_at": "2024-05-31",
-   "issuer": "中质协质量保证中心",
-   "ref_no": "00124Q30xxxR0M",
-   "version": 1,
-   "rendered": "ISO9001 质量管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124Q30xxxR0M）",
-   "evidence_uri": "minio://aibid-evidence/demo/CERT-002.pdf",
-   "evidence_sha": "f23c9481a4f9fc23…"
-  },
-  {
-   "fact_id": "CERT-003",
-   "kind": "certificate",
-   "kind_label": "资质证书",
-   "title": "ISO14001 环境管理体系认证证书",
-   "issued_at": "2024-05-31",
-   "issuer": "中质协质量保证中心",
-   "ref_no": "00124E30xxxR0M",
-   "version": 1,
-   "rendered": "ISO14001 环境管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124E30xxxR0M）",
-   "evidence_uri": "minio://aibid-evidence/demo/CERT-003.pdf",
-   "evidence_sha": "5a861d370f41df90…"
-  },
-  {
-   "fact_id": "CERT-004",
-   "kind": "certificate",
-   "kind_label": "资质证书",
-   "title": "安全生产许可证",
-   "issued_at": "2025-03-31",
-   "issuer": "湖北省住房和城乡建设厅",
-   "ref_no": "（鄂）JZ安许证字[2022]xxxxxx",
-   "version": 1,
-   "rendered": "安全生产许可证（湖北省住房和城乡建设厅颁发，有效期至 2025 年 03 月，证书编号 （鄂）JZ安许证字[2022]xxxxxx）",
-   "evidence_uri": "minio://aibid-evidence/demo/CERT-004.pdf",
-   "evidence_sha": "e08d9a2247f036b1…"
-  },
-  {
-   "fact_id": "CERT-005",
-   "kind": "certificate",
-   "kind_label": "资质证书",
-   "title": "黑臭水体治理产业联盟理事长单位证书",
-   "issued_at": "2022-10-31",
-   "issuer": "黑臭水体治理产业技术创新战略联盟",
-   "ref_no": "LM2022xxx",
-   "version": 1,
-   "rendered": "黑臭水体治理产业联盟理事长单位证书（黑臭水体治理产业技术创新战略联盟颁发，有效期至 2022 年 10 月，证书编号 LM2022xxx）",
-   "evidence_uri": "minio://aibid-evidence/demo/CERT-005.pdf",
-   "evidence_sha": "6ae4c3e649a9a4d3…"
-  },
-  {
-   "fact_id": "PAT-001",
-   "kind": "patent",
-   "kind_label": "专利",
-   "title": "一种农村生活污水一体化处理装置",
-   "issued_at": "2021-05-18",
-   "issuer": "国家知识产权局",
-   "ref_no": "ZL202110xxxxxx.1",
-   "version": 1,
-   "rendered": "一种农村生活污水一体化处理装置（2021 年授权，国家知识产权局，专利号 ZL202110xxxxxx.1）",
-   "evidence_uri": "minio://aibid-evidence/demo/PAT-001.pdf",
-   "evidence_sha": "451e6819ddfb5a27…"
-  },
-  {
-   "fact_id": "PAT-002",
-   "kind": "patent",
-   "kind_label": "专利",
-   "title": "一种光伏曝气机用智能控制方法",
-   "issued_at": "2022-03-22",
-   "issuer": "国家知识产权局",
-   "ref_no": "ZL202210xxxxxx.4",
-   "version": 1,
-   "rendered": "一种光伏曝气机用智能控制方法（2022 年授权，国家知识产权局，专利号 ZL202210xxxxxx.4）",
-   "evidence_uri": "minio://aibid-evidence/demo/PAT-002.pdf",
-   "evidence_sha": "1fe068c39fde8a35…"
-  },
-  {
-   "fact_id": "PAT-003",
-   "kind": "patent",
-   "kind_label": "专利",
-   "title": "一种黑臭水体原位修复的微生物菌剂投加装置",
-   "issued_at": "2020-09-11",
-   "issuer": "国家知识产权局",
-   "ref_no": "ZL202010xxxxxx.7",
-   "version": 1,
-   "rendered": "一种黑臭水体原位修复的微生物菌剂投加装置（2020 年授权，国家知识产权局，专利号 ZL202010xxxxxx.7）",
-   "evidence_uri": "minio://aibid-evidence/demo/PAT-003.pdf",
-   "evidence_sha": "bfc25747720b61cc…"
-  },
-  {
-   "fact_id": "PAT-004",
-   "kind": "patent",
-   "kind_label": "专利",
-   "title": "一种风光互补供电的污水处理系统",
-   "issued_at": "2023-01-06",
-   "issuer": "国家知识产权局",
-   "ref_no": "ZL202310xxxxxx.2",
-   "version": 1,
-   "rendered": "一种风光互补供电的污水处理系统（2023 年授权，国家知识产权局，专利号 ZL202310xxxxxx.2）",
-   "evidence_uri": "minio://aibid-evidence/demo/PAT-004.pdf",
-   "evidence_sha": "e988c1952bad925c…"
-  },
-  {
-   "fact_id": "PAT-005",
-   "kind": "patent",
-   "kind_label": "专利",
-   "title": "一种河道生态护坡结构",
-   "issued_at": "2019-07-30",
-   "issuer": "国家知识产权局",
-   "ref_no": "ZL201910xxxxxx.9",
-   "version": 1,
-   "rendered": "一种河道生态护坡结构（2019 年授权，国家知识产权局，专利号 ZL201910xxxxxx.9）",
-   "evidence_uri": "minio://aibid-evidence/demo/PAT-005.pdf",
-   "evidence_sha": "69fa8e205b41334a…"
-  },
-  {
-   "fact_id": "PAT-006",
-   "kind": "patent",
-   "kind_label": "专利",
-   "title": "一种污水处理用高效沉淀池",
-   "issued_at": "2022-11-25",
-   "issuer": "国家知识产权局",
-   "ref_no": "ZL202211xxxxxx.5",
-   "version": 1,
-   "rendered": "一种污水处理用高效沉淀池（2022 年授权，国家知识产权局，专利号 ZL202211xxxxxx.5）",
-   "evidence_uri": "minio://aibid-evidence/demo/PAT-006.pdf",
-   "evidence_sha": "4e7d1f25a1809b3a…"
-  },
-  {
-   "fact_id": "PRJ-001",
-   "kind": "project",
-   "kind_label": "工程业绩",
-   "title": "某某县农村生活污水治理工程（一期）",
-   "issued_at": "2021-10-15",
-   "issuer": "某某县住房和城乡建设局",
-   "ref_no": "HBJM-2021-037",
-   "version": 1,
-   "rendered": "某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）",
-   "evidence_uri": "minio://aibid-evidence/demo/PRJ-001.pdf",
-   "evidence_sha": "8f11b23338820cf8…"
-  },
-  {
-   "fact_id": "PRJ-002",
-   "kind": "project",
-   "kind_label": "工程业绩",
-   "title": "某某市黑臭水体整治工程",
-   "issued_at": "2020-06-28",
-   "issuer": "某某市城市管理执法局",
-   "ref_no": "HBJM-2020-014",
-   "version": 1,
-   "rendered": "某某市黑臭水体整治工程（2020 年 06 月，建设单位 某某市城市管理执法局）（合同号 HBJM-2020-014）",
-   "evidence_uri": "minio://aibid-evidence/demo/PRJ-002.pdf",
-   "evidence_sha": "9d396777d0385c5e…"
-  },
-  {
-   "fact_id": "PRJ-003",
-   "kind": "project",
-   "kind_label": "工程业绩",
-   "title": "某某镇污水处理厂提标改造工程",
-   "issued_at": "2022-08-09",
-   "issuer": "某某镇人民政府",
-   "ref_no": "HBJM-2022-052",
-   "version": 1,
-   "rendered": "某某镇污水处理厂提标改造工程（2022 年 08 月，建设单位 某某镇人民政府）（合同号 HBJM-2022-052）",
-   "evidence_uri": "minio://aibid-evidence/demo/PRJ-003.pdf",
-   "evidence_sha": "3f84031b8b21b360…"
-  },
-  {
-   "fact_id": "PRJ-004",
-   "kind": "project",
-   "kind_label": "工程业绩",
-   "title": "某某区农村环境综合整治项目",
-   "issued_at": "2023-04-20",
-   "issuer": "某某区生态环境分局",
-   "ref_no": "HBJM-2023-008",
-   "version": 1,
-   "rendered": "某某区农村环境综合整治项目（2023 年 04 月，建设单位 某某区生态环境分局）（合同号 HBJM-2023-008）",
-   "evidence_uri": "minio://aibid-evidence/demo/PRJ-004.pdf",
-   "evidence_sha": "48caaeece3c89e4e…"
-  },
-  {
-   "fact_id": "PRJ-005",
-   "kind": "project",
-   "kind_label": "工程业绩",
-   "title": "某某县河道生态修复工程",
-   "issued_at": "2019-12-05",
-   "issuer": "某某县水利和湖泊局",
-   "ref_no": "HBJM-2019-061",
-   "version": 1,
-   "rendered": "某某县河道生态修复工程（2019 年 12 月，建设单位 某某县水利和湖泊局）（合同号 HBJM-2019-061）",
-   "evidence_uri": "minio://aibid-evidence/demo/PRJ-005.pdf",
-   "evidence_sha": "3a1bb31ceb3a0601…"
-  },
-  {
-   "fact_id": "PRJ-006",
-   "kind": "project",
-   "kind_label": "工程业绩",
-   "title": "某某村分散式污水处理设施建设",
-   "issued_at": "2024-03-12",
-   "issuer": "某某乡人民政府",
-   "ref_no": "HBJM-2024-021",
-   "version": 1,
-   "rendered": "某某村分散式污水处理设施建设（2024 年 03 月，建设单位 某某乡人民政府）（合同号 HBJM-2024-021）",
-   "evidence_uri": "minio://aibid-evidence/demo/PRJ-006.pdf",
-   "evidence_sha": "260a58b61a04afec…"
-  },
-  {
-   "fact_id": "QUAL-001",
-   "kind": "qualification",
-   "kind_label": "资质类别",
-   "title": "环境工程（水污染防治）设计专项乙级",
-   "issued_at": "2021-06-30",
-   "issuer": "湖北省住房和城乡建设厅",
-   "ref_no": "A1420xxxxxx",
-   "version": 1,
-   "rendered": "环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅）",
-   "evidence_uri": "minio://aibid-evidence/demo/QUAL-001.pdf",
-   "evidence_sha": "55d7ee641e12d8a1…"
-  },
-  {
-   "fact_id": "QUAL-002",
-   "kind": "qualification",
-   "kind_label": "资质类别",
-   "title": "环保工程专业承包壹级",
-   "issued_at": "2020-11-15",
-   "issuer": "湖北省住房和城乡建设厅",
-   "ref_no": "D2420xxxxxx",
-   "version": 1,
-   "rendered": "环保工程专业承包壹级（湖北省住房和城乡建设厅）",
-   "evidence_uri": "minio://aibid-evidence/demo/QUAL-002.pdf",
-   "evidence_sha": "5c1e9aceab9e3c17…"
-  },
-  {
-   "fact_id": "QUAL-003",
-   "kind": "qualification",
-   "kind_label": "资质类别",
-   "title": "市政公用工程施工总承包贰级",
-   "issued_at": "2019-08-20",
-   "issuer": "湖北省住房和城乡建设厅",
-   "ref_no": "D3420xxxxxx",
-   "version": 1,
-   "rendered": "市政公用工程施工总承包贰级（湖北省住房和城乡建设厅）",
-   "evidence_uri": "minio://aibid-evidence/demo/QUAL-003.pdf",
-   "evidence_sha": "f24ddfac94985275…"
-  }
- ],
- "opportunities": [
-  {
-   "notice_id": "N-001",
-   "title": "某某县农村生活污水治理工程（二期）",
-   "score": 9.4,
-   "verdict": "推荐",
-   "reasons": [
-    "具备环保工程专业承包壹级，同类业绩 2 项，专利 2 项"
-   ],
-   "matched": [
-    {
-     "fact_id": "PRJ-001",
-     "title": "某某县农村生活污水治理工程（一期）"
-    },
-    {
-     "fact_id": "PAT-001",
-     "title": "一种农村生活污水一体化处理装置"
-    }
-   ]
-  },
-  {
-   "notice_id": "N-002",
-   "title": "某某镇污水处理厂提标改造工程",
-   "score": 8.1,
-   "verdict": "推荐",
-   "reasons": [
-    "设计专项乙级满足门槛，有同类提标改造业绩"
-   ],
-   "matched": [
-    {
-     "fact_id": "PRJ-003",
-     "title": "某某镇污水处理厂提标改造工程"
-    }
-   ]
-  },
-  {
-   "notice_id": "N-003",
-   "title": "某某区河道生态修复工程",
-   "score": 6.2,
-   "verdict": "待定",
-   "reasons": [
-    "资质满足但缺少河道修复类业绩，需人工判断"
-   ],
-   "matched": []
-  },
-  {
-   "notice_id": "N-004",
-   "title": "某某市市政道路照明工程",
-   "score": 2.1,
-   "verdict": "不推荐",
-   "reasons": [
-    "与公司主业不符，无对应资质与业绩"
-   ],
-   "matched": []
-  },
-  {
-   "notice_id": "N-005",
-   "title": "某某县垃圾填埋场封场工程",
-   "score": 1.4,
-   "verdict": "不推荐",
-   "reasons": [
-    "无固废处理资质，超出业务范围"
-   ],
-   "matched": []
-  }
- ],
- "generate": {
-  "商务标|农村生活污水": {
-   "draft_id": "DRAFT-B6A98DC0CF36",
-   "keyword": "农村生活污水",
-   "template": "商务标",
-   "blocked": false,
-   "status": "verified",
-   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
-   "generated_by": "小陈",
-   "sections": [
-    {
-     "heading": "第一章 投标人基本情况",
-     "text": "我公司为依法注册的环保工程企业，具备环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅），并持有安全生产许可证（湖北省住房和城乡建设厅颁发，有效期至 2025 年 03 月，证书编号 （鄂）JZ安许证字[2022]xxxxxx）、ISO9001 质量管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124Q30xxxR0M）、ISO14001 环境管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124E30xxxR0M）、高新技术企业证书（湖北省科学技术厅颁发，有效期至 2023 年 12 月，证书编号 GR20234200xxxx）。上述资质证书均在有效期内，投标时可提供原件核验。"
-    },
-    {
-     "heading": "第二章 类似工程业绩",
-     "text": "近年我公司完成的同类工程业绩包括某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）、某某区农村环境综合整治项目（2023 年 04 月，建设单位 某某区生态环境分局）（合同号 HBJM-2023-008）、某某镇污水处理厂提标改造工程（2022 年 08 月，建设单位 某某镇人民政府）（合同号 HBJM-2022-052）、某某村分散式污水处理设施建设（2024 年 03 月，建设单位 某某乡人民政府）（合同号 HBJM-2024-021）。以上项目均已竣工并通过建设单位验收，可提供合同及验收证明。"
-    },
-    {
-     "heading": "第三章 技术能力与知识产权",
-     "text": "我公司在环保治理领域持续投入研发，已获授权专利包括一种农村生活污水一体化处理装置（2021 年授权，国家知识产权局，专利号 ZL202110xxxxxx.1）、一种污水处理用高效沉淀池（2022 年授权，国家知识产权局，专利号 ZL202211xxxxxx.5）、一种风光互补供电的污水处理系统（2023 年授权，国家知识产权局，专利号 ZL202310xxxxxx.2）。上述专利均为自主申请，权属清晰无争议。"
-    }
-   ],
-   "citations": [
-    {
-     "fact_id": "QUAL-001",
-     "start": 18,
-     "end": 48,
-     "rendered": "环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅）",
-     "kind": "qualification",
-     "title": "环境工程（水污染防治）设计专项乙级",
-     "evidence_uri": "minio://aibid-evidence/demo/QUAL-001.pdf",
-     "issued_at": "2021-06-30"
-    },
-    {
-     "fact_id": "CERT-004",
-     "start": 52,
-     "end": 118,
-     "rendered": "安全生产许可证（湖北省住房和城乡建设厅颁发，有效期至 2025 年 03 月，证书编号 （鄂）JZ安许证字[2022]xxxxxx）",
-     "kind": "certificate",
-     "title": "安全生产许可证",
-     "evidence_uri": "minio://aibid-evidence/demo/CERT-004.pdf",
-     "issued_at": "2025-03-31"
-    },
-    {
-     "fact_id": "CERT-002",
-     "start": 119,
-     "end": 187,
-     "rendered": "ISO9001 质量管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124Q30xxxR0M）",
-     "kind": "certificate",
-     "title": "ISO9001 质量管理体系认证证书",
-     "evidence_uri": "minio://aibid-evidence/demo/CERT-002.pdf",
-     "issued_at": "2024-05-31"
-    },
-    {
-     "fact_id": "CERT-003",
-     "start": 188,
-     "end": 257,
-     "rendered": "ISO14001 环境管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124E30xxxR0M）",
-     "kind": "certificate",
-     "title": "ISO14001 环境管理体系认证证书",
-     "evidence_uri": "minio://aibid-evidence/demo/CERT-003.pdf",
-     "issued_at": "2024-05-31"
-    },
-    {
-     "fact_id": "CERT-001",
-     "start": 258,
-     "end": 315,
-     "rendered": "高新技术企业证书（湖北省科学技术厅颁发，有效期至 2023 年 12 月，证书编号 GR20234200xxxx）",
-     "kind": "certificate",
-     "title": "高新技术企业证书",
-     "evidence_uri": "minio://aibid-evidence/demo/CERT-001.pdf",
-     "issued_at": "2023-12-31"
-    },
-    {
-     "fact_id": "PRJ-001",
-     "start": 357,
-     "end": 423,
-     "rendered": "某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）",
-     "kind": "project",
-     "title": "某某县农村生活污水治理工程（一期）",
-     "evidence_uri": "minio://aibid-evidence/demo/PRJ-001.pdf",
-     "issued_at": "2021-10-15"
-    },
-    {
-     "fact_id": "PRJ-004",
-     "start": 424,
-     "end": 484,
-     "rendered": "某某区农村环境综合整治项目（2023 年 04 月，建设单位 某某区生态环境分局）（合同号 HBJM-2023-008）",
-     "kind": "project",
-     "title": "某某区农村环境综合整治项目",
-     "evidence_uri": "minio://aibid-evidence/demo/PRJ-004.pdf",
-     "issued_at": "2023-04-20"
-    },
-    {
-     "fact_id": "PRJ-003",
-     "start": 485,
-     "end": 544,
-     "rendered": "某某镇污水处理厂提标改造工程（2022 年 08 月，建设单位 某某镇人民政府）（合同号 HBJM-2022-052）",
-     "kind": "project",
-     "title": "某某镇污水处理厂提标改造工程",
-     "evidence_uri": "minio://aibid-evidence/demo/PRJ-003.pdf",
-     "issued_at": "2022-08-09"
-    },
-    {
-     "fact_id": "PRJ-006",
-     "start": 545,
-     "end": 604,
-     "rendered": "某某村分散式污水处理设施建设（2024 年 03 月，建设单位 某某乡人民政府）（合同号 HBJM-2024-021）",
-     "kind": "project",
-     "title": "某某村分散式污水处理设施建设",
-     "evidence_uri": "minio://aibid-evidence/demo/PRJ-006.pdf",
-     "issued_at": "2024-03-12"
-    },
-    {
-     "fact_id": "PAT-001",
-     "start": 660,
-     "end": 714,
-     "rendered": "一种农村生活污水一体化处理装置（2021 年授权，国家知识产权局，专利号 ZL202110xxxxxx.1）",
-     "kind": "patent",
-     "title": "一种农村生活污水一体化处理装置",
-     "evidence_uri": "minio://aibid-evidence/demo/PAT-001.pdf",
-     "issued_at": "2021-05-18"
-    },
-    {
-     "fact_id": "PAT-006",
-     "start": 715,
-     "end": 766,
-     "rendered": "一种污水处理用高效沉淀池（2022 年授权，国家知识产权局，专利号 ZL202211xxxxxx.5）",
-     "kind": "patent",
-     "title": "一种污水处理用高效沉淀池",
-     "evidence_uri": "minio://aibid-evidence/demo/PAT-006.pdf",
-     "issued_at": "2022-11-25"
-    },
-    {
-     "fact_id": "PAT-004",
-     "start": 767,
-     "end": 821,
-     "rendered": "一种风光互补供电的污水处理系统（2023 年授权，国家知识产权局，专利号 ZL202310xxxxxx.2）",
-     "kind": "patent",
-     "title": "一种风光互补供电的污水处理系统",
-     "evidence_uri": "minio://aibid-evidence/demo/PAT-004.pdf",
-     "issued_at": "2023-01-06"
-    }
-   ],
-   "reasons": [],
-   "risk": {
-    "coverage": 1.0,
-    "checked": 12,
-    "findings": [
-     {
-      "code": "R10_报价大写与小写不一致",
-      "located": "投标函",
-      "detail": "报价大写或小写缺失，无法核验一致性"
-     },
-     {
-      "code": "R12_文件签署或盖章页缺失",
-      "located": "签署页",
-      "detail": "缺少签署或盖章页"
-     }
-    ]
-   }
-  },
-  "技术标|农村生活污水": {
-   "draft_id": "DRAFT-C367D59CF2E8",
-   "keyword": "农村生活污水",
-   "template": "技术标",
-   "blocked": false,
-   "status": "verified",
-   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
-   "generated_by": "小陈",
-   "sections": [
-    {
-     "heading": "第一章 项目理解与总体思路",
-     "text": "本次招标项目与我公司主业高度契合。结合我方在某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）中积累的工程经验，拟按现行技术规范编制本技术方案。"
-    },
-    {
-     "heading": "第二章 工艺路线与关键技术",
-     "text": "针对本项目的治理目标，我方采用以一种农村生活污水一体化处理装置（2021 年授权，国家知识产权局，专利号 ZL202110xxxxxx.1）为核心的工艺路线，该技术在同类项目中已有实际应用验证，处理效果稳定可达标。"
-    },
-    {
-     "heading": "第三章 履约能力保障",
-     "text": "我方具备环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅），并已完成某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）、某某区农村环境综合整治项目（2023 年 04 月，建设单位 某某区生态环境分局）（合同号 HBJM-2023-008）等工程，人员、设备与资金均可满足本项目工期要求。"
-    }
-   ],
-   "citations": [
-    {
-     "fact_id": "PRJ-001",
-     "start": 22,
-     "end": 88,
-     "rendered": "某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）",
-     "kind": "project",
-     "title": "某某县农村生活污水治理工程（一期）",
-     "evidence_uri": "minio://aibid-evidence/demo/PRJ-001.pdf",
-     "issued_at": "2021-10-15"
-    },
-    {
-     "fact_id": "PAT-001",
-     "start": 130,
-     "end": 184,
-     "rendered": "一种农村生活污水一体化处理装置（2021 年授权，国家知识产权局，专利号 ZL202110xxxxxx.1）",
-     "kind": "patent",
-     "title": "一种农村生活污水一体化处理装置",
-     "evidence_uri": "minio://aibid-evidence/demo/PAT-001.pdf",
-     "issued_at": "2021-05-18"
-    },
-    {
-     "fact_id": "QUAL-001",
-     "start": 226,
-     "end": 256,
-     "rendered": "环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅）",
-     "kind": "qualification",
-     "title": "环境工程（水污染防治）设计专项乙级",
-     "evidence_uri": "minio://aibid-evidence/demo/QUAL-001.pdf",
-     "issued_at": "2021-06-30"
-    },
-    {
-     "fact_id": "PRJ-001",
-     "start": 261,
-     "end": 327,
-     "rendered": "某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）",
-     "kind": "project",
-     "title": "某某县农村生活污水治理工程（一期）",
-     "evidence_uri": "minio://aibid-evidence/demo/PRJ-001.pdf",
-     "issued_at": "2021-10-15"
-    },
-    {
-     "fact_id": "PRJ-004",
-     "start": 328,
-     "end": 388,
-     "rendered": "某某区农村环境综合整治项目（2023 年 04 月，建设单位 某某区生态环境分局）（合同号 HBJM-2023-008）",
-     "kind": "project",
-     "title": "某某区农村环境综合整治项目",
-     "evidence_uri": "minio://aibid-evidence/demo/PRJ-004.pdf",
-     "issued_at": "2023-04-20"
-    }
-   ],
-   "reasons": [],
-   "risk": {
-    "coverage": 1.0,
-    "checked": 12,
-    "findings": [
-     {
-      "code": "R10_报价大写与小写不一致",
-      "located": "投标函",
-      "detail": "报价大写或小写缺失，无法核验一致性"
-     },
-     {
-      "code": "R12_文件签署或盖章页缺失",
-      "located": "签署页",
-      "detail": "缺少签署或盖章页"
-     }
-    ]
-   }
-  },
-  "商务标|污水处理厂提标改造": {
-   "draft_id": "DRAFT-6F6B93E7B114",
-   "keyword": "污水处理厂提标改造",
-   "template": "商务标",
-   "blocked": false,
-   "status": "verified",
-   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
-   "generated_by": "小陈",
-   "sections": [
-    {
-     "heading": "第一章 投标人基本情况",
-     "text": "我公司为依法注册的环保工程企业，具备环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅），并持有安全生产许可证（湖北省住房和城乡建设厅颁发，有效期至 2025 年 03 月，证书编号 （鄂）JZ安许证字[2022]xxxxxx）、ISO9001 质量管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124Q30xxxR0M）、ISO14001 环境管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124E30xxxR0M）、高新技术企业证书（湖北省科学技术厅颁发，有效期至 2023 年 12 月，证书编号 GR20234200xxxx）。上述资质证书均在有效期内，投标时可提供原件核验。"
-    },
-    {
-     "heading": "第二章 类似工程业绩",
-     "text": "近年我公司完成的同类工程业绩包括某某镇污水处理厂提标改造工程（2022 年 08 月，建设单位 某某镇人民政府）（合同号 HBJM-2022-052）、某某村分散式污水处理设施建设（2024 年 03 月，建设单位 某某乡人民政府）（合同号 HBJM-2024-021）、某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）。以上项目均已竣工并通过建设单位验收，可提供合同及验收证明。"
-    },
-    {
-     "heading": "第三章 技术能力与知识产权",
-     "text": "我公司在环保治理领域持续投入研发，已获授权专利包括一种污水处理用高效沉淀池（2022 年授权，国家知识产权局，专利号 ZL202211xxxxxx.5）、一种风光互补供电的污水处理系统（2023 年授权，国家知识产权局，专利号 ZL202310xxxxxx.2）、一种农村生活污水一体化处理装置（2021 年授权，国家知识产权局，专利号 ZL202110xxxxxx.1）。上述专利均为自主申请，权属清晰无争议。"
-    }
-   ],
-   "citations": [
-    {
-     "fact_id": "QUAL-001",
-     "start": 18,
-     "end": 48,
-     "rendered": "环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅）",
-     "kind": "qualification",
-     "title": "环境工程（水污染防治）设计专项乙级",
-     "evidence_uri": "minio://aibid-evidence/demo/QUAL-001.pdf",
-     "issued_at": "2021-06-30"
-    },
-    {
-     "fact_id": "CERT-004",
-     "start": 52,
-     "end": 118,
-     "rendered": "安全生产许可证（湖北省住房和城乡建设厅颁发，有效期至 2025 年 03 月，证书编号 （鄂）JZ安许证字[2022]xxxxxx）",
-     "kind": "certificate",
-     "title": "安全生产许可证",
-     "evidence_uri": "minio://aibid-evidence/demo/CERT-004.pdf",
-     "issued_at": "2025-03-31"
-    },
-    {
-     "fact_id": "CERT-002",
-     "start": 119,
-     "end": 187,
-     "rendered": "ISO9001 质量管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124Q30xxxR0M）",
-     "kind": "certificate",
-     "title": "ISO9001 质量管理体系认证证书",
-     "evidence_uri": "minio://aibid-evidence/demo/CERT-002.pdf",
-     "issued_at": "2024-05-31"
-    },
-    {
-     "fact_id": "CERT-003",
-     "start": 188,
-     "end": 257,
-     "rendered": "ISO14001 环境管理体系认证证书（中质协质量保证中心颁发，有效期至 2024 年 05 月，证书编号 00124E30xxxR0M）",
-     "kind": "certificate",
-     "title": "ISO14001 环境管理体系认证证书",
-     "evidence_uri": "minio://aibid-evidence/demo/CERT-003.pdf",
-     "issued_at": "2024-05-31"
-    },
-    {
-     "fact_id": "CERT-001",
-     "start": 258,
-     "end": 315,
-     "rendered": "高新技术企业证书（湖北省科学技术厅颁发，有效期至 2023 年 12 月，证书编号 GR20234200xxxx）",
-     "kind": "certificate",
-     "title": "高新技术企业证书",
-     "evidence_uri": "minio://aibid-evidence/demo/CERT-001.pdf",
-     "issued_at": "2023-12-31"
-    },
-    {
-     "fact_id": "PRJ-003",
-     "start": 357,
-     "end": 416,
-     "rendered": "某某镇污水处理厂提标改造工程（2022 年 08 月，建设单位 某某镇人民政府）（合同号 HBJM-2022-052）",
-     "kind": "project",
-     "title": "某某镇污水处理厂提标改造工程",
-     "evidence_uri": "minio://aibid-evidence/demo/PRJ-003.pdf",
-     "issued_at": "2022-08-09"
-    },
-    {
-     "fact_id": "PRJ-006",
-     "start": 417,
-     "end": 476,
-     "rendered": "某某村分散式污水处理设施建设（2024 年 03 月，建设单位 某某乡人民政府）（合同号 HBJM-2024-021）",
-     "kind": "project",
-     "title": "某某村分散式污水处理设施建设",
-     "evidence_uri": "minio://aibid-evidence/demo/PRJ-006.pdf",
-     "issued_at": "2024-03-12"
-    },
-    {
-     "fact_id": "PRJ-001",
-     "start": 477,
-     "end": 543,
-     "rendered": "某某县农村生活污水治理工程（一期）（2021 年 10 月，建设单位 某某县住房和城乡建设局）（合同号 HBJM-2021-037）",
-     "kind": "project",
-     "title": "某某县农村生活污水治理工程（一期）",
-     "evidence_uri": "minio://aibid-evidence/demo/PRJ-001.pdf",
-     "issued_at": "2021-10-15"
-    },
-    {
-     "fact_id": "PAT-006",
-     "start": 599,
-     "end": 650,
-     "rendered": "一种污水处理用高效沉淀池（2022 年授权，国家知识产权局，专利号 ZL202211xxxxxx.5）",
-     "kind": "patent",
-     "title": "一种污水处理用高效沉淀池",
-     "evidence_uri": "minio://aibid-evidence/demo/PAT-006.pdf",
-     "issued_at": "2022-11-25"
-    },
-    {
-     "fact_id": "PAT-004",
-     "start": 651,
-     "end": 705,
-     "rendered": "一种风光互补供电的污水处理系统（2023 年授权，国家知识产权局，专利号 ZL202310xxxxxx.2）",
-     "kind": "patent",
-     "title": "一种风光互补供电的污水处理系统",
-     "evidence_uri": "minio://aibid-evidence/demo/PAT-004.pdf",
-     "issued_at": "2023-01-06"
-    },
-    {
-     "fact_id": "PAT-001",
-     "start": 706,
-     "end": 760,
-     "rendered": "一种农村生活污水一体化处理装置（2021 年授权，国家知识产权局，专利号 ZL202110xxxxxx.1）",
-     "kind": "patent",
-     "title": "一种农村生活污水一体化处理装置",
-     "evidence_uri": "minio://aibid-evidence/demo/PAT-001.pdf",
-     "issued_at": "2021-05-18"
-    }
-   ],
-   "reasons": [],
-   "risk": {
-    "coverage": 1.0,
-    "checked": 12,
-    "findings": [
-     {
-      "code": "R10_报价大写与小写不一致",
-      "located": "投标函",
-      "detail": "报价大写或小写缺失，无法核验一致性"
-     },
-     {
-      "code": "R12_文件签署或盖章页缺失",
-      "located": "签署页",
-      "detail": "缺少签署或盖章页"
-     }
-    ]
-   }
-  },
-  "技术标|河道生态修复": {
-   "draft_id": "DRAFT-09E4F49BA8B8",
-   "keyword": "河道生态修复",
-   "template": "技术标",
-   "blocked": false,
-   "status": "verified",
-   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
-   "generated_by": "小陈",
-   "sections": [
-    {
-     "heading": "第一章 项目理解与总体思路",
-     "text": "本次招标项目与我公司主业高度契合。结合我方在某某县河道生态修复工程（2019 年 12 月，建设单位 某某县水利和湖泊局）（合同号 HBJM-2019-061）中积累的工程经验，拟按现行技术规范编制本技术方案。"
-    },
-    {
-     "heading": "第二章 工艺路线与关键技术",
-     "text": "针对本项目的治理目标，我方采用以一种河道生态护坡结构（2019 年授权，国家知识产权局，专利号 ZL201910xxxxxx.9）为核心的工艺路线，该技术在同类项目中已有实际应用验证，处理效果稳定可达标。"
-    },
-    {
-     "heading": "第三章 履约能力保障",
-     "text": "我方具备环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅），并已完成某某县河道生态修复工程（2019 年 12 月，建设单位 某某县水利和湖泊局）（合同号 HBJM-2019-061）、某某区农村环境综合整治项目（2023 年 04 月，建设单位 某某区生态环境分局）（合同号 HBJM-2023-008）等工程，人员、设备与资金均可满足本项目工期要求。"
-    }
-   ],
-   "citations": [
-    {
-     "fact_id": "PRJ-005",
-     "start": 22,
-     "end": 80,
-     "rendered": "某某县河道生态修复工程（2019 年 12 月，建设单位 某某县水利和湖泊局）（合同号 HBJM-2019-061）",
-     "kind": "project",
-     "title": "某某县河道生态修复工程",
-     "evidence_uri": "minio://aibid-evidence/demo/PRJ-005.pdf",
-     "issued_at": "2019-12-05"
-    },
-    {
-     "fact_id": "PAT-005",
-     "start": 122,
-     "end": 171,
-     "rendered": "一种河道生态护坡结构（2019 年授权，国家知识产权局，专利号 ZL201910xxxxxx.9）",
-     "kind": "patent",
-     "title": "一种河道生态护坡结构",
-     "evidence_uri": "minio://aibid-evidence/demo/PAT-005.pdf",
-     "issued_at": "2019-07-30"
-    },
-    {
-     "fact_id": "QUAL-001",
-     "start": 213,
-     "end": 243,
-     "rendered": "环境工程（水污染防治）设计专项乙级（湖北省住房和城乡建设厅）",
-     "kind": "qualification",
-     "title": "环境工程（水污染防治）设计专项乙级",
-     "evidence_uri": "minio://aibid-evidence/demo/QUAL-001.pdf",
-     "issued_at": "2021-06-30"
-    },
-    {
-     "fact_id": "PRJ-005",
-     "start": 248,
-     "end": 306,
-     "rendered": "某某县河道生态修复工程（2019 年 12 月，建设单位 某某县水利和湖泊局）（合同号 HBJM-2019-061）",
-     "kind": "project",
-     "title": "某某县河道生态修复工程",
-     "evidence_uri": "minio://aibid-evidence/demo/PRJ-005.pdf",
-     "issued_at": "2019-12-05"
-    },
-    {
-     "fact_id": "PRJ-004",
-     "start": 307,
-     "end": 367,
-     "rendered": "某某区农村环境综合整治项目（2023 年 04 月，建设单位 某某区生态环境分局）（合同号 HBJM-2023-008）",
-     "kind": "project",
-     "title": "某某区农村环境综合整治项目",
-     "evidence_uri": "minio://aibid-evidence/demo/PRJ-004.pdf",
-     "issued_at": "2023-04-20"
-    }
-   ],
-   "reasons": [],
-   "risk": {
-    "coverage": 1.0,
-    "checked": 12,
-    "findings": [
-     {
-      "code": "R10_报价大写与小写不一致",
-      "located": "投标函",
-      "detail": "报价大写或小写缺失，无法核验一致性"
-     },
-     {
-      "code": "R12_文件签署或盖章页缺失",
-      "located": "签署页",
-      "detail": "缺少签署或盖章页"
-     }
-    ]
-   }
-  },
-  "商务标|地铁盾构": {
-   "draft_id": "DRAFT-DB038A3EBB8F",
-   "keyword": "地铁盾构",
-   "template": "商务标",
-   "blocked": true,
-   "status": "blocked",
-   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
-   "generated_by": "小陈",
-   "sections": [],
-   "citations": [],
-   "reasons": [
-    "槽位 projects（类别 project）需要至少 2 条事实，实际只检索到 0 条 —— 拒绝以占位或推测填充"
-   ],
-   "risk": null
-  }
- },
- "approved": {
-  "draft_id": "DRAFT-B6A98DC0CF36",
-  "生成人": "小陈",
-  "时间": "2026-09-20T14:00:51.039647+00:00",
-  "数据版本": "SNAP-AC3BC8C4BCDBED8B",
-  "审定人": "王主任",
-  "审定时间": "2026-09-20T14:00:51.052673+00:00",
-  "完整": true
- },
- "drafts": [
-  {
-   "draft_id": "DRAFT-B6A98DC0CF36",
-   "keyword": "农村生活污水",
-   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
-   "citations": 12,
-   "审定人": "王主任",
-   "完整": true
-  },
-  {
-   "draft_id": "DRAFT-C367D59CF2E8",
-   "keyword": "农村生活污水",
-   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
-   "citations": 5,
-   "审定人": "",
-   "完整": false
-  },
-  {
-   "draft_id": "DRAFT-6F6B93E7B114",
-   "keyword": "污水处理厂提标改造",
-   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
-   "citations": 11,
-   "审定人": "",
-   "完整": false
-  },
-  {
-   "draft_id": "DRAFT-09E4F49BA8B8",
-   "keyword": "河道生态修复",
-   "snapshot_id": "SNAP-AC3BC8C4BCDBED8B",
-   "citations": 5,
-   "审定人": "",
-   "完整": false
-  }
- ],
- "audit": {
-  "chain_ok": true,
-  "chain_summary": "哈希链完整：共 14 条记录，逐条重算一致",
-  "length": 14,
-  "quadruple_complete": false,
-  "missing": [
-   "DRAFT-09E4F49BA8B8",
-   "DRAFT-6F6B93E7B114",
-   "DRAFT-C367D59CF2E8"
-  ],
-  "records": [
-   {
-    "seq": 0,
-    "ts": "2026-09-20 22:00:51",
-    "actor": "小陈",
-    "action": "draft.generated",
-    "hash": "65861debffee…",
-    "prev": "000000000000…"
-   },
-   {
-    "seq": 1,
-    "ts": "2026-09-20 22:00:51",
-    "actor": "小陈",
-    "action": "draft.verified",
-    "hash": "bd07698e9bb8…",
-    "prev": "65861debffee…"
-   },
-   {
-    "seq": 2,
-    "ts": "2026-09-20 22:00:51",
-    "actor": "小陈",
-    "action": "draft.attested",
-    "hash": "9e5f3594af2d…",
-    "prev": "bd07698e9bb8…"
-   },
-   {
-    "seq": 3,
-    "ts": "2026-09-20 22:00:51",
-    "actor": "小陈",
-    "action": "draft.generated",
-    "hash": "7d947adc891e…",
-    "prev": "9e5f3594af2d…"
-   },
-   {
-    "seq": 4,
-    "ts": "2026-09-20 22:00:51",
-    "actor": "小陈",
-    "action": "draft.verified",
-    "hash": "68609c73cf44…",
-    "prev": "7d947adc891e…"
-   },
-   {
-    "seq": 5,
-    "ts": "2026-09-20 22:00:51",
-    "actor": "小陈",
-    "action": "draft.attested",
-    "hash": "ca00c2947176…",
-    "prev": "68609c73cf44…"
-   },
-   {
-    "seq": 6,
-    "ts": "2026-09-20 22:00:51",
-    "actor": "小陈",
-    "action": "draft.generated",
-    "hash": "eb74564d547d…",
-    "prev": "ca00c2947176…"
-   },
-   {
-    "seq": 7,
-    "ts": "2026-09-20 22:00:51",
-    "actor": "小陈",
-    "action": "draft.verified",
-    "hash": "ae0d606586c8…",
-    "prev": "eb74564d547d…"
-   },
-   {
-    "seq": 8,
-    "ts": "2026-09-20 22:00:51",
-    "actor": "小陈",
-    "action": "draft.attested",
-    "hash": "d03be68f9b2b…",
-    "prev": "ae0d606586c8…"
-   },
-   {
-    "seq": 9,
-    "ts": "2026-09-20 22:00:51",
-    "actor": "小陈",
-    "action": "draft.generated",
-    "hash": "a759b18cfc1f…",
-    "prev": "d03be68f9b2b…"
-   },
-   {
-    "seq": 10,
-    "ts": "2026-09-20 22:00:51",
-    "actor": "小陈",
-    "action": "draft.verified",
-    "hash": "d189fc67a3bc…",
-    "prev": "a759b18cfc1f…"
-   },
-   {
-    "seq": 11,
-    "ts": "2026-09-20 22:00:51",
-    "actor": "小陈",
-    "action": "draft.attested",
-    "hash": "c520ec093a0f…",
-    "prev": "d189fc67a3bc…"
-   },
-   {
-    "seq": 12,
-    "ts": "2026-09-20 22:00:51",
-    "actor": "小陈",
-    "action": "draft.blocked",
-    "hash": "92678c08f80e…",
-    "prev": "c520ec093a0f…"
-   },
-   {
-    "seq": 13,
-    "ts": "2026-09-20 22:00:51",
-    "actor": "王主任",
-    "action": "draft.approved",
-    "hash": "b847468ae560…",
-    "prev": "92678c08f80e…"
-   }
-  ]
- },
- "status": {
-  "事实总数": 20,
-  "分类": {
-   "certificate": 5,
-   "patent": 6,
-   "project": 6,
-   "qualification": 3
-  },
-  "数据版本": "SNAP-AC3BC8C4BCDBED8B",
-  "审计记录": 14,
-  "模型适配器": "passthrough",
-  "声明": "本工作台当前载入的是合成演示数据，非公司真实资质业绩。"
- },
- "meta": {
-  "模板关键词": [
-   [
-    "商务标",
-    "农村生活污水"
-   ],
-   [
-    "技术标",
-    "农村生活污水"
-   ],
-   [
-    "商务标",
-    "污水处理厂提标改造"
-   ],
-   [
-    "技术标",
-    "河道生态修复"
-   ],
-   [
-    "商务标",
-    "地铁盾构"
-   ]
-  ],
-  "生成人": "小陈",
-  "审定人": "王主任",
-  "source": "scripts/export_static_demo.py 由真实流水线导出"
- }
-};
-
-</script>
-<script>
-/* AIBID 静态演示版 · fetch 垫片
+/* AIBID 投标小助手 · 前端逻辑（单文件、无后端、无第三方库）
  *
- * 线上版（app/server.py）里，前端靠 fetch("/api/...") 向后端取数。
- * 静态版没有后端，于是这里把 window.fetch 换掉：仍然按同样的 URL、同样的
- * JSON 结构作答，只是数据来自 demo-data.js 里固化的导出结果。
+ * 做这件事的纪律，与 AIBID 工作台一致：
  *
- * 这样做的意义：app.js **一行业务代码都不用改**。演示版跑的是与线上
- * 完全相同的前端，不存在「为了演示另写一套界面」——那样演示的就不是
- * 真东西了。
+ *   1. **写进标书的每个字都逐字来自上传的材料**，程序只做拼接，不做改写。
+ *      每处引用都记着它出自哪个文件的哪一行，点开就能核对。
+ *   2. **缺事实就拒绝出稿**（fail-closed），不拿占位文字凑数。
+ *   3. **每一次动作都进哈希链**，改动任意一条，其后全部失配。
  *
- * 三条纪律：
- *   1. 不伪造任何记录。审定接口直接报错，而不是在前端编一条审计记录 ——
- *      这个系统的全部价值就在于审计链不可篡改，演示版更不能自己破例。
- *   2. 未预置的生成组合返回「阻断」，与真实系统 fail-closed 的行为一致：
- *      查不到事实就不出稿。
- *   3. 数据是导出时真跑出来的，本文件不含任何写死的结果。
+ * 全部计算在本机浏览器里完成，数据不出设备 —— 没有后端，也就没有
+ * 「上传到哪台服务器」这个问题。这对投标资料是必要的。
  */
 
-(function () {
-  "use strict";
-
-  const D = window.DEMO_DATA;
-  if (!D) {
-    document.addEventListener("DOMContentLoaded", function () {
-      const n = document.getElementById("notice");
-      if (n) { n.textContent = "未找到 demo-data.js，演示数据加载失败。"; }
-    });
-    return;
-  }
-
-  const realFetch = window.fetch ? window.fetch.bind(window) : null;
-
-  function json(data, status) {
-    return new Response(JSON.stringify(data), {
-      status: status || 200,
-      headers: { "Content-Type": "application/json; charset=utf-8" },
-    });
-  }
-
-  /* 从 URL 里取出接口名。
-   * 页面上写的是 "/api/status"（相对根），但部署到 GitHub Pages 的子路径
-   * 下时浏览器会把它解析成 "https://主机/aibid/api/status"，故不能直接
-   * 比字符串，取末段更稳。 */
-  function endpoint(url) {
-    /* 去掉查询串与哈希后取 /api/xxx 的末段 */
-    const path = String(url).split(/[?#]/)[0];
-    const m = path.match(/\/api\/([A-Za-z_]+)\/?$/);
-    return m ? m[1] : "";
-  }
-
-  function blockedReply(template, keyword) {
-    const combos = (D.meta && D.meta.模板关键词) || [];
-    const list = combos.map(function (c) { return c[0] + "／" + c[1]; }).join("、");
-    return {
-      draft_id: "",
-      keyword: keyword,
-      template: template,
-      blocked: true,
-      status: "BLOCKED",
-      snapshot_id: D.status.数据版本,
-      generated_by: "",
-      sections: [],
-      citations: [],
-      risk: null,
-      reasons: [
-        "静态演示版未预置「" + template + "／" + keyword + "」的生成结果 —— "
-          + "本页没有后端，无法真的去检索事实库。",
-        "可回放的组合：" + list + "。",
-        "这不是故障：真实系统查不到事实时同样拒绝出稿（fail-closed），"
-          + "此处行为与其一致 —— 阻断是默认行为，放行才需要条件。",
-      ],
-    };
-  }
-
-  window.fetch = function (input, init) {
-    const url = (input && input.url) ? input.url : input;
-    const name = endpoint(url);
-    const method = ((init && init.method) || "GET").toUpperCase();
-
-    /* ---------------------------------------------- 只读接口 */
-    if (method === "GET" && name) {
-      if (name === "status") { return Promise.resolve(json(D.status)); }
-      if (name === "facts") { return Promise.resolve(json(D.facts)); }
-      if (name === "opportunities") { return Promise.resolve(json(D.opportunities)); }
-      if (name === "drafts") { return Promise.resolve(json(D.drafts)); }
-      if (name === "audit") { return Promise.resolve(json(D.audit)); }
-    }
-
-    /* ---------------------------------------------- 生成（回放导出结果） */
-    if (method === "POST" && name === "generate") {
-      let body = {};
-      try { body = JSON.parse((init && init.body) || "{}"); } catch (e) { body = {}; }
-      const template = String(body.template || "商务标");
-      const keyword = String(body.keyword || "").trim();
-      const hit = D.generate[template + "|" + keyword];
-      if (hit) { return Promise.resolve(json(hit)); }
-      return Promise.resolve(json(blockedReply(template, keyword)));
-    }
-
-    /* ---------------------------------------------- 审定：明确拒绝 */
-    if (method === "POST" && name === "approve") {
-      return Promise.resolve(json({
-        error: "静态演示版无后端，不能新增审定记录 —— 审计链在导出时已固化。"
-             + "要看完整的审定流程，请在本地运行：启动AIBID.bat（Windows）／"
-             + "启动AIBID.command（macOS）／启动AIBID.sh（Linux）。",
-      }, 403));
-    }
-
-    /* 其余请求照旧走真实 fetch */
-    if (realFetch) { return realFetch(input, init); }
-    return Promise.reject(new Error("静态演示版不支持的请求：" + url));
-  };
-
-  /* ---------------------------------------------- 关键词下拉候选
-   * 候选直接来自导出数据的 meta，不另抄一份，避免两边对不上。 */
-  document.addEventListener("DOMContentLoaded", function () {
-    const dl = document.getElementById("kwlist");
-    if (!dl || !D.meta) { return; }
-    const seen = {};
-    (D.meta.模板关键词 || []).forEach(function (c) {
-      const kw = c[1];
-      if (seen[kw]) { return; }
-      seen[kw] = 1;
-      const opt = document.createElement("option");
-      opt.value = kw;
-      dl.appendChild(opt);
-    });
-  });
-})();
-
-</script>
-<script>
-/* AIBID 工作台 · 前端逻辑
- *
- * 本文件最要紧的一段是 renderDraft()：把初稿渲染成带引用高亮的 HTML。
- * 服务端给出的 Citation 偏移是相对「各章节以 \n 连接后的全文」的，
- * 所以要先按章节基准偏移把它换算到段内，再把每段切成
- * [普通文字][引用][普通文字]… 依次输出。
- *
- * 为什么要做到这个程度：M4-② 要求「引用正确率 100%」。一个看不见的
- * 100% 和没有差不多；把每处事实都标出来、点开就能看到 fact_id 与
- * 证书原件，这个承诺才是可检验的。 */
-
 const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
 
-/* ------------------------------------------------------------ 工具 */
+/* ==================================================================== 工具 */
+
 const ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ESC[c]);
 
-async function api(path, opts) {
-  const res = await fetch(path, opts);
-  const data = await res.json().catch(() => ({ error: "响应不是合法 JSON" }));
-  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
-  return data;
-}
+const today = () => new Date().toISOString().slice(0, 10);
+const stamp = () => new Date().toLocaleString("zh-CN", { hour12: false });
 
 function toast(msg, isErr) {
-  const n = $("#notice");
-  n.style.background = isErr ? "#FAF0EF" : "#EAF6F9";
-  n.style.color = isErr ? "#7A3B36" : "#1E5E86";
-  n.style.borderColor = isErr ? "#E8C4C0" : "#C4E2EC";
-  n.textContent = msg;
+  const el = $("#notice");
+  if (!el) { alert(msg); return; }
+  el.textContent = msg;
+  el.className = "noticebox" + (isErr ? " warnbox" : "");
+  el.style.display = "block";
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { el.style.display = "none"; }, 6000);
 }
 
-/* ------------------------------------------------------------ 标签页 */
-document.querySelectorAll(".tab").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".tab").forEach((b) => b.classList.remove("active"));
-    document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
-    btn.classList.add("active");
-    $("#view-" + btn.dataset.view).classList.add("active");
-    if (btn.dataset.view === "audit") loadAudit();
-    if (btn.dataset.view === "facts") loadFacts();
-  });
-});
-
-/* ------------------------------------------------------------ 弹窗 */
 function openModal(html) {
   $("#modalBody").innerHTML = html;
   $("#modal").classList.add("open");
@@ -1636,300 +482,1349 @@ $("#modal").addEventListener("click", (e) => {
   if (e.target.id === "modal") $("#modal").classList.remove("open");
 });
 
-/* ------------------------------------------------------------ 系统状态 */
-async function loadStatus() {
-  try {
-    const s = await api("/api/status");
-    $("#status").textContent = `事实 ${s.事实总数} 条 · 审计 ${s.审计记录} 条`;
-    $("#notice").textContent = s.声明;
-  } catch (e) {
-    toast("无法连接服务：" + e.message, true);
-  }
-}
-
-/* ------------------------------------------------------------ 今日机会 */
-const VERDICTS = ["推荐", "不推荐", "待定"];
-
-async function loadOpps() {
-  const list = $("#oppsList");
-  list.innerHTML = '<div class="spin">加载中…</div>';
-  let items;
-  try {
-    items = await api("/api/opportunities");
-  } catch (e) {
-    list.innerHTML = `<div class="empty">加载失败：${esc(e.message)}</div>`;
-    return;
-  }
-
-  /* 三档完整性 —— PRD M2-① 缺档即当日验收不通过，故在界面上直接标红 */
-  const counts = Object.fromEntries(VERDICTS.map((v) => [v, 0]));
-  items.forEach((o) => { if (counts[o.verdict] !== undefined) counts[o.verdict]++; });
-  const missing = VERDICTS.filter((v) => counts[v] === 0);
-
-  $("#verdictbar").innerHTML =
-    VERDICTS.map(
-      (v) => `<div class="vchip ${counts[v] === 0 ? "miss" : ""}">
-        <div class="n">${counts[v]}</div><div class="l">${v}${counts[v] === 0 ? " · 缺档" : ""}</div>
-      </div>`
-    ).join("") +
-    `<div class="vchip ${missing.length ? "miss" : ""}">
-       <div class="n" style="font-size:15px">${missing.length ? "不通过" : "通过"}</div>
-       <div class="l">三档完整性</div>
-     </div>`;
-
-  list.innerHTML = items.map((o) => `
-    <div class="opp ${esc(o.verdict)}">
-      <div class="row1">
-        <span class="title">${esc(o.title)}</span>
-        <span class="badge ${esc(o.verdict)}">${esc(o.verdict)}</span>
-        <span class="score">匹配度 ${o.score.toFixed(1)} · ${esc(o.notice_id)}</span>
-      </div>
-      <div class="reason">研判依据：${o.reasons.map(esc).join("；")}</div>
-      ${o.matched.length ? `<div class="matched">匹配到的资质业绩：${
-        o.matched.map((m) => `<span class="tag">${esc(m.title)}</span>`).join("")
-      }</div>` : ""}
-    </div>`).join("");
-}
-
-/* ------------------------------------------------------------ 资质业绩库 */
-const KINDS = ["", "qualification", "certificate", "patent", "project"];
-const KIND_LABEL = { "": "全部", qualification: "资质类别", certificate: "资质证书",
-                     patent: "专利", project: "工程业绩" };
-let factKind = "";
-
-async function loadFacts() {
-  $("#factFilter").innerHTML = KINDS.map(
-    (k) => `<button class="${k === factKind ? "on" : ""}" data-k="${k}">${KIND_LABEL[k]}</button>`
-  ).join("");
-  $("#factFilter").querySelectorAll("button").forEach((b) => {
-    b.addEventListener("click", () => { factKind = b.dataset.k; loadFacts(); });
-  });
-
-  const box = $("#factsList");
-  box.innerHTML = '<div class="spin">加载中…</div>';
-  let items;
-  try {
-    items = await api("/api/facts");
-  } catch (e) {
-    box.innerHTML = `<div class="empty">加载失败：${esc(e.message)}</div>`;
-    return;
-  }
-  if (factKind) items = items.filter((f) => f.kind === factKind);
-  if (!items.length) { box.innerHTML = '<div class="empty">暂无数据</div>'; return; }
-
-  box.innerHTML = items.map((f) => `
-    <div class="fact">
-      <div class="top">
-        <span class="fid">${esc(f.fact_id)}</span>
-        <span class="ttl">${esc(f.title)}</span>
-        <span class="tag">${esc(f.kind_label)}</span>
-        <span class="score">v${f.version}</span>
-      </div>
-      <div class="meta">${esc(f.issuer)} · ${esc(f.issued_at)} · 编号 ${esc(f.ref_no || "—")}</div>
-      <div class="rendered">${esc(f.rendered)}</div>
-    </div>`).join("");
-}
-
-/* ------------------------------------------------------------ 标书生成 */
-
-/* 把引用偏移从「全文」换算到「段内」，并按段切分渲染。
+/* ---------------------------------------------------------- SHA-256（纯 JS）
  *
- * plain_text() 是 sections 以 \n 连接，故第 i 段的基准偏移为
- * 前面各段长度之和 + i 个换行符 —— 与后端 Composer 的游标推进一致。 */
-function renderDraft(sections, citations) {
-  const bases = [];
-  let cursor = 0;
-  sections.forEach((s, i) => {
-    bases.push(cursor);
-    cursor += s.text.length + (i < sections.length - 1 ? 1 : 0);
+ * 故意不用 crypto.subtle：它要求安全上下文，file:// 与某些浏览器下拿不到，
+ * 而我们要的就是「双击就能用」。自己的实现还免去了异步等待，哈希链算起来直接。
+ * 实现是否正确由测试对 Python hashlib 的结果验证，不靠背下来的常量。 */
+const SHA256 = (() => {
+  const K = new Uint32Array([
+    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1,
+    0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
+    0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786,
+    0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+    0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147,
+    0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13,
+    0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b,
+    0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+    0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a,
+    0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
+    0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
+  ]);
+
+  const rotr = (x, n) => (x >>> n) | (x << (32 - n));
+
+  function hex(bytes) {
+    const len = bytes.length;
+    const bitLen = len * 8;
+    // 补齐：0x80 + 若干 0 + 8 字节长度，补到 64 的整数倍。
+    // 这里必须向上取整：写成 ((len+9)>>6)+1 会在 len+9 恰好是 64 的倍数时
+    // 多补出一整个全零块，长度域后移，哈希全错。靠测试对 Python 的结果兜住。
+    const withPad = new Uint8Array(((len + 9 + 63) >> 6) << 6);
+    withPad.set(bytes);
+    withPad[len] = 0x80;
+    const dv = new DataView(withPad.buffer);
+    dv.setUint32(withPad.length - 4, bitLen >>> 0);
+    dv.setUint32(withPad.length - 8, Math.floor(bitLen / 4294967296) >>> 0);
+
+    const H = new Uint32Array([
+      0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+      0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
+    ]);
+    const w = new Uint32Array(64);
+
+    for (let off = 0; off < withPad.length; off += 64) {
+      for (let i = 0; i < 16; i++) w[i] = dv.getUint32(off + i * 4);
+      for (let i = 16; i < 64; i++) {
+        const s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ (w[i - 15] >>> 3);
+        const s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);
+        w[i] = (w[i - 16] + s0 + w[i - 7] + s1) >>> 0;
+      }
+      let [a, b, c, d, e, f, g, h] = H;
+      for (let i = 0; i < 64; i++) {
+        const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+        const ch = (e & f) ^ (~e & g);
+        const t1 = (h + S1 + ch + K[i] + w[i]) >>> 0;
+        const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+        const maj = (a & b) ^ (a & c) ^ (b & c);
+        const t2 = (S0 + maj) >>> 0;
+        h = g; g = f; f = e; e = (d + t1) >>> 0;
+        d = c; c = b; b = a; a = (t1 + t2) >>> 0;
+      }
+      H[0] = (H[0] + a) >>> 0; H[1] = (H[1] + b) >>> 0;
+      H[2] = (H[2] + c) >>> 0; H[3] = (H[3] + d) >>> 0;
+      H[4] = (H[4] + e) >>> 0; H[5] = (H[5] + f) >>> 0;
+      H[6] = (H[6] + g) >>> 0; H[7] = (H[7] + h) >>> 0;
+    }
+    return Array.from(H).map((x) => x.toString(16).padStart(8, "0")).join("");
+  }
+
+  return { hex: (str) => hex(new TextEncoder().encode(str)) };
+})();
+
+/* ==================================================================== 状态 */
+
+const STORE_KEY = "aibid_helper_v1";
+
+const state = {
+  tender: null,      // {file, text, fields:{}, reqs:[]}
+  facts: [],         // 事实条目
+  draft: null,       // 最近一次生成的初稿
+  audit: [],
+  seq: 0,
+};
+
+function save() {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify({
+      tender: state.tender, facts: state.facts, draft: state.draft, audit: state.audit,
+    }));
+  } catch (e) {
+    toast("本地存储写入失败（可能超限）：" + e.message, true);
+  }
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    state.tender = d.tender || null;
+    state.facts = d.facts || [];
+    state.draft = d.draft || null;
+    state.audit = d.audit || [];
+  } catch (e) { /* 数据损坏就当空的，不阻断使用 */ }
+}
+
+/* ---------------------------------------------------------- 审计哈希链 */
+
+function chainAppend(action, payload) {
+  const prev = state.audit.length
+    ? state.audit[state.audit.length - 1].hash : "0".repeat(64);
+  const seq = state.audit.length;
+  const ts = new Date().toISOString();
+  const body = JSON.stringify({ seq, ts, action, payload, prev });
+  const hash = SHA256.hex(body);
+  state.audit.push({ seq, ts, action, payload, prev, hash });
+}
+
+function chainVerify() {
+  let prev = "0".repeat(64);
+  for (const r of state.audit) {
+    const body = JSON.stringify({
+      seq: r.seq, ts: r.ts, action: r.action, payload: r.payload, prev,
+    });
+    if (r.prev !== prev || SHA256.hex(body) !== r.hash) {
+      return { ok: false, at: r.seq };
+    }
+    prev = r.hash;
+  }
+  return { ok: true, length: state.audit.length };
+}
+
+/* ==================================================================== 解析 */
+/* 把上传的文件转成纯文本。全部在浏览器里做 —— 没有后端可以依赖，
+   也正好不必把投标资料传到别人的服务器上。 */
+
+async function inflateRaw(bytes) {
+  if (typeof DecompressionStream === "undefined") {
+    throw new Error("这个浏览器不支持 DecompressionStream，无法解压 docx");
+  }
+  const s = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+  return new Uint8Array(await new Response(s).arrayBuffer());
+}
+
+/* 文本编码：中文招标文件常是 GBK。先按 UTF-8 解，出现明显替换字符再换 GBK。 */
+function decodeText(buf) {
+  const bytes = new Uint8Array(buf);
+  const utf8 = new TextDecoder("utf-8").decode(bytes);
+  const bad = (utf8.match(/�/g) || []).length;
+  if (bad > 0 && bad / Math.max(1, utf8.length) > 0.002) {
+    try { return new TextDecoder("gbk").decode(bytes).replace(/^﻿/, ""); } catch (e) { /* 用 utf8 */ }
+  }
+  return utf8.replace(/^﻿/, "");
+}
+
+const XML_ENT = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'" };
+function xmlUnescape(s) {
+  return s.replace(/&(#x?[0-9a-fA-F]+|[a-z]+);/g, (m, e) => {
+    if (e[0] === "#") {
+      const code = e[1] === "x" || e[1] === "X"
+        ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
+      return Number.isFinite(code) ? String.fromCodePoint(code) : m;
+    }
+    return XML_ENT[e] !== undefined ? XML_ENT[e] : m;
   });
+}
 
-  return sections.map((sec, i) => {
-    const base = bases[i], end = base + sec.text.length;
-    const local = citations
-      .filter((c) => c.start >= base && c.end <= end)
+/* docx 本质是个 zip。这里直接读 ZIP 中央目录，只取 word/document.xml ——
+   不引第三方解压库，也就不需要为「装不装得上」操心。 */
+async function docxToText(buf) {
+  const dv = new DataView(buf);
+  const u8 = new Uint8Array(buf);
+
+  let eocd = -1;
+  const floor = Math.max(0, buf.byteLength - 66000);
+  for (let i = buf.byteLength - 22; i >= floor; i--) {
+    if (dv.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+  }
+  if (eocd < 0) throw new Error("不是有效的 .docx（找不到 ZIP 结尾）。若文件是 .doc，请用 Word 另存为 .docx");
+
+  const count = dv.getUint16(eocd + 10, true);
+  let off = dv.getUint32(eocd + 16, true);
+  let target = null;
+
+  for (let i = 0; i < count; i++) {
+    if (dv.getUint32(off, true) !== 0x02014b50) break;
+    const method = dv.getUint16(off + 10, true);
+    const compSize = dv.getUint32(off + 20, true);
+    const nameLen = dv.getUint16(off + 28, true);
+    const extraLen = dv.getUint16(off + 30, true);
+    const cmtLen = dv.getUint16(off + 32, true);
+    const localOff = dv.getUint32(off + 42, true);
+    const name = new TextDecoder("utf-8").decode(u8.subarray(off + 46, off + 46 + nameLen));
+    if (name === "word/document.xml") { target = { method, compSize, localOff }; }
+    off += 46 + nameLen + extraLen + cmtLen;
+  }
+  if (!target) throw new Error("这个 docx 里没有正文（word/document.xml），可能是空文件或损坏");
+
+  // 本地头里的 nameLen/extraLen 可能与中央目录不同，必须按本地头重新算
+  const lo = target.localOff;
+  if (dv.getUint32(lo, true) !== 0x04034b50) throw new Error("docx 结构异常（本地文件头不对）");
+  const lNameLen = dv.getUint16(lo + 26, true);
+  const lExtraLen = dv.getUint16(lo + 28, true);
+  const dataStart = lo + 30 + lNameLen + lExtraLen;
+  const comp = u8.subarray(dataStart, dataStart + target.compSize);
+
+  let xmlBytes;
+  if (target.method === 8) xmlBytes = await inflateRaw(comp);
+  else if (target.method === 0) xmlBytes = comp;
+  else throw new Error("docx 用了不支持的压缩方式：" + target.method);
+
+  const xml = new TextDecoder("utf-8").decode(xmlBytes);
+  return docxXmlToText(xml);
+}
+
+function docxXmlToText(xml) {
+  const body = xml.replace(/^[\s\S]*?<w:body[^>]*>/, "").replace(/<\/w:body>[\s\S]*$/, "");
+  return xmlUnescape(
+    body
+      .replace(/<w:tab\b[^>]*\/?>/g, "\t")
+      .replace(/<w:br\b[^>]*\/?>/g, "\n")
+      .replace(/<\/w:tc>/g, "\t")          // 表格单元格之间用制表符
+      .replace(/<\/w:tr>/g, "\n")
+      .replace(/<\/w:p>/g, "\n")           // 段落结束 → 换行（这是分行的关键）
+      .replace(/<[^>]+>/g, "")
+  ).replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+
+/* PDF：尽力而为。
+ * 只处理最常见的「FlateDecode 压缩的文本流」，从 BT/ET 块里取 Tj/TJ 操作数。
+ * CID 子集字体的中文 PDF 多半取不出正确文字 —— 所以结果一律回填到可编辑框里，
+ * 让人一眼看出不对再改，而不是悄悄给你一堆乱码。 */
+async function pdfToText(buf) {
+  const u8 = new Uint8Array(buf);
+  const latin = new TextDecoder("latin1").decode(u8);
+  const out = [];
+  const re = /stream\r?\n?/g;
+  let m;
+  while ((m = re.exec(latin))) {
+    const start = m.index + m[0].length;
+    const end = latin.indexOf("endstream", start);
+    if (end < 0) continue;
+    let data;
+    try { data = await inflateRaw(u8.subarray(start, end)); } catch (e) { continue; }
+    const txt = new TextDecoder("latin1").decode(data);
+    if (!/\bBT\b/.test(txt) || !/(Tj|TJ)/.test(txt)) continue;
+    out.push(pdfOpsToText(txt));
+  }
+  const joined = out.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+  if (!joined) {
+    throw new Error("这个 PDF 取不出文字（多半是扫描件或用了特殊字体编码）。"
+      + "请用「直接粘贴文字」把正文粘进来。");
+  }
+  return joined;
+}
+
+function pdfOpsToText(s) {
+  let out = "";
+  const re = /\((?:\\.|[^\\()])*\)|<[0-9A-Fa-f\s]+>|\bTd\b|\bTD\b|\bT\*\b|\bTJ\b|\bTj\b|\bET\b/g;
+  let m;
+  while ((m = re.exec(s))) {
+    const tok = m[0];
+    if (tok === "Td" || tok === "TD" || tok === "T*" || tok === "ET") { out += "\n"; continue; }
+    if (tok === "TJ" || tok === "Tj") continue;
+    if (tok[0] === "(") out += pdfString(tok.slice(1, -1));
+    else if (tok[0] === "<") {
+      const hx = tok.slice(1, -1).replace(/\s+/g, "");
+      let str = "";
+      for (let i = 0; i + 1 < hx.length; i += 2) {
+        const c = parseInt(hx.substr(i, 2), 16);
+        if (c) str += String.fromCharCode(c);
+      }
+      out += str;
+    }
+  }
+  return out.replace(/[ \t]{2,}/g, " ").trim();
+}
+
+function pdfString(s) {
+  return s.replace(/\\([nrtbf()\\]|[0-7]{1,3})/g, (m, g) => {
+    if (/^[0-7]+$/.test(g)) return String.fromCharCode(parseInt(g, 8));
+    return { n: "\n", r: "\r", t: "\t", b: "", f: "", "(": "(", ")": ")", "\\": "\\" }[g] || g;
+  });
+}
+
+async function fileToText(file) {
+  const name = file.name.toLowerCase();
+  const buf = await file.arrayBuffer();
+  if (name.endsWith(".docx")) return docxToText(buf);
+  if (name.endsWith(".pdf")) return pdfToText(buf);
+  if (name.endsWith(".doc")) {
+    throw new Error(".doc 是旧版二进制格式，浏览器里解不了。"
+      + "请用 Word 打开后「另存为」.docx 或 .txt，或直接把正文粘进来。");
+  }
+  return decodeText(buf);
+}
+
+/* ==================================================================== 抽取 */
+
+const KIND_LABEL = {
+  qualification: "资质类别",
+  certificate: "资质证书",
+  patent: "专利",
+  project: "工程业绩",
+  personnel: "人员",
+};
+const KIND_TAG = {
+  qualification: "q", certificate: "c", patent: "p", project: "j", personnel: "m",
+};
+
+/* 判断一句话属于哪类事实。顺序要紧：先具体后笼统，
+   否则「环保工程专业承包壹级证书」会被笼统的「证书」规则抢走。 */
+const KIND_RULES = [
+  { kind: "patent", test: (s) => /专利/.test(s) },
+  { kind: "qualification",
+    test: (s) => /(专业承包|施工总承包|设计专项|工程设计|资质等级|资质证书|资质)/.test(s) },
+  { kind: "certificate",
+    test: (s) => /(认证证书|体系认证|许可证|资格证书|证书)/.test(s) },
+  { kind: "personnel",
+    test: (s) => /(建造师|注册工程师|职称|技术负责人|项目经理|安全员)/.test(s) },
+  // 业绩的判断刻意**不要求出现「工程」「项目」二字**：
+  // 实测「××村分散式污水处理设施建设」这两个词一个都没有，却被当成非业绩漏掉。
+  // 改为「有合同/中标/竣工/验收这类凭证词」+「有建设类名词」，两边都占才算。
+  { kind: "project",
+    test: (s) => /(合同号|合同编号|中标|竣工|验收)/.test(s)
+              && /(工程|项目|设施|建设|改造|治理|修复|整治)/.test(s) },
+];
+
+function pickKind(s) {
+  for (const r of KIND_RULES) if (r.test(s)) return r.kind;
+  return null;
+}
+
+/* 把「一、资质情况」「××公司资质业绩材料」这类小标题挡在事实库外面。
+   判据是「有没有数字」：真正的资质、专利、业绩条目几乎都带日期或编号，
+   而小标题不带。没有数字时再退回看长度和结尾词，避免误杀
+   「环保工程专业承包壹级，湖北省住房和城乡建设厅」这种没写日期的条目。 */
+const HEADER_RE = /^[一二三四五六七八九十\d]+[、.．)）]/;
+const NOISE_TAIL_RE = /(材料|情况|清单|一览|汇总|简介|说明|目录|如下|见下表)$/;
+
+function looksLikeHeading(s) {
+  if (/\d/.test(s)) return false;
+  const t = s.trim();
+  if (HEADER_RE.test(t)) return true;
+  if (NOISE_TAIL_RE.test(t)) return true;
+  return t.length < 16;
+}
+
+function pickRefNo(s) {
+  // 专利号：用 [0-9X] 而不是 \d —— 材料里常见 ZL202110XXXXXX.1 这种带占位 X 的写法，
+  // 只认数字的老写法会匹配失败，专利号整个丢掉。
+  let m = s.match(/ZL\s?[0-9X]{8,}(?:\.[0-9X]+)?/i);
+  if (m) return m[0].replace(/\s+/g, "");
+  // 编号的字符类必须含汉字：「鄂JZ安许证字2022XXXXXX」以汉字开头，
+  // 老写法只列了字母数字，这条编号就直接取不到了。
+  m = s.match(/(?:证书编号|证书号|编号|证号|注册号|备案号|专利号|No\.?|NO\.?)\s*[：:]\s*([A-Za-z0-9一-龥\-—–_（）()\[\]【】/.]{3,40})/);
+  if (m) return m[1].replace(/[，。；;]$/, "");
+  m = s.match(/[（(]\s*([A-Z]{1,4}\d{5,}[A-Z0-9\-]*)\s*[)）]/);
+  if (m) return m[1];
+  m = s.match(/\b([A-Z]{2,4}\d{6,}[A-Z0-9\-.]*)\b/);
+  return m ? m[1].replace(/\.$/, "") : "";
+}
+
+/* 日期返回两份：norm 供排序与显示，raw 是原文里那一段。
+ * 为什么两份都要：写进标书时用 raw，才能保证「插入的每个字都来自原文」这条
+ * 约束可检验 —— 用规整后的 2021-06-30 去比对原文的 2021年6月30日 是比不上的。 */
+function pickDate(s) {
+  // 末尾的「日」必须吃掉：漏了它，raw 会变成「2021年6月30」——
+  // 插进正文就成了「（…，2021年6月30，编号 …）」，看着像被截断了
+  const m = s.match(/((?:19|20)\d{2})\s*[年\-/.]\s*(\d{1,2})\s*[月\-/.]?\s*(\d{1,2})?\s*日?/);
+  if (!m) return { norm: "", raw: "" };
+  const p = (x) => String(x).padStart(2, "0");
+  return {
+    norm: m[3] ? `${m[1]}-${p(m[2])}-${p(m[3])}` : `${m[1]}-${p(m[2])}`,
+    raw: m[0].trim(),
+  };
+}
+
+/* 机关名。两个坑：
+ *   1. 早先在后缀表里漏了「政府」，于是「××镇人民政府」整条取不到，
+ *      业绩项只剩日期，读起来像半句话。
+ *   2. 字符类只写了汉字，`×` 不在其中，导致「××县住房和城乡建设局」
+ *      被从 ×× 之后才开始匹配，提取成「县住房和城乡建设局」——把单位名截了。
+ * 另外改成**按逗号分段逐个试**，而不是整句扫描：材料里机关名几乎总是
+ * 「名称，机关，日期，编号」里独立的一段，分段匹配比全句正则可靠得多。 */
+const ISSUER_RE = /^([A-Za-z0-9一-龥·（）()×X]{2,30}?(?:管理委员会|管委会|人民政府|办公室|管理处|指挥部|总局|研究院|科学院|中心|协会|联盟|厅|局|部|委|公司|集团|银行|政府))$/;
+
+function pickIssuer(s) {
+  for (const seg of s.split(/[，,]/)) {
+    const t = seg.trim();
+    if (t.length < 4 || t.length > 32) continue;
+    if (/^\d/.test(t)) continue;                          // 日期段
+    if (/(编号|证号|合同号|专利号|注册号)/.test(t)) continue;
+    const m = t.match(ISSUER_RE);
+    if (m) return m[1];
+  }
+  return "";
+}
+
+function pickTitle(s, kind) {
+  // 去掉「证书编号：xxx」「2020年11月」这类尾巴，留下名称
+  let t = s
+    .replace(/[（(][^）)]*(?:编号|证号|No\.?)[^）)]*[）)]/gi, "")
+    .replace(/(?:证书编号|证书号|编号|证号|注册号|备案号)\s*[：:]\s*\S+/g, "")
+    .replace(/(?:颁发|签发|发证|认定|授予)[^，。；]*/g, "")
+    .replace(/[，,;；]\s*(?:有效期|期限)[^，。；]*/g, "")
+    .replace(/[。；;]\s*$/, "")
+    .trim();
+  // 名称一般就是第一个逗号之前的那一段：「资质名，发证机关，日期，编号」。
+  // 阈值取 24 而不是 42 —— 实测「环境工程（水污染防治）设计专项乙级，湖北省住房
+  // 和城乡建设厅，2021年6月30日，」共 37 字，卡在 42 以内就整行留下来当了名称。
+  // 门槛降到 24 字后，这类「名称+机关+日期」的组合都能正确切出名称。
+  if (t.length > 24) {
+    const cut = t.split(/[，,]/)[0];
+    if (cut.length >= 6) t = cut;
+  }
+  return t.slice(0, 60) || KIND_LABEL[kind];
+}
+
+/* 把一段材料切成「句」，逐句判断。切句而非切行，是因为 Word 里
+   一条资质常常整段写成一行，逐行判断会把好几条混成一条。 */
+function splitSentences(text) {
+  const out = [];
+  const lines = text.split(/\r?\n/);
+  lines.forEach((line, li) => {
+    const t = line.trim();
+    if (!t) return;
+    // 行内按句号/分号切开，保留原文片段。
+    // 刻意不用后行断言 (?<=…)：老一点的 WebKit 会在**解析阶段**直接抛
+    // SyntaxError，那会让整个脚本一行都不执行 —— 宁可多写三行。
+    const parts = [];
+    let cur = "";
+    for (const ch of t) {
+      cur += ch;
+      if (ch === "。" || ch === "；" || ch === ";") { parts.push(cur.trim()); cur = ""; }
+    }
+    if (cur.trim()) parts.push(cur.trim());
+    (parts.length ? parts : [t]).forEach((p) => {
+      if (p.length >= 4) out.push({ text: p, line: li + 1 });
+    });
+  });
+  return out;
+}
+
+function extractFacts(text, sourceName) {
+  const facts = [];
+  const seen = new Set();
+  for (const { text: s, line } of splitSentences(text)) {
+    if (looksLikeHeading(s)) continue;
+    const kind = pickKind(s);
+    if (!kind) continue;
+    const title = pickTitle(s, kind);
+    if (!title || title.length < 3) continue;
+    const key = kind + "|" + title;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const d = pickDate(s);
+    facts.push({
+      id: "F-" + String(facts.length + 1).padStart(3, "0") + "-"
+        + SHA256.hex(sourceName + "|" + line + "|" + s).slice(0, 6).toUpperCase(),
+      kind,
+      title,
+      ref_no: pickRefNo(s),
+      date: d.norm,
+      date_raw: d.raw,
+      issuer: pickIssuer(s),
+      raw: s,                       // ← 整行原文，用于溯源核对；写进标书的是 renderFact()
+      source: sourceName,
+      line,
+    });
+  }
+  return facts;
+}
+
+/* 每个抽取出来的字段，都必须能在原文里原样找到。
+   这是「逐字」这条承诺唯一可自动检验的形式 —— 少了它，「逐字」只是一句口号。 */
+function factFieldsVerbatim(f) {
+  const fields = [f.title, f.issuer, f.ref_no, f.date_raw].filter(Boolean);
+  return fields.every((x) => f.raw.includes(x));
+}
+
+/* 把一条事实渲染成能读进句子里的一段话。
+ *
+ * 早先的做法是把整行原文直接插进正文，读出来是台账不是标书：
+ *   「具备环境工程（水污染防治）设计专项乙级，湖北省住房和城乡建设厅，
+ *     2021年6月30日，证书编号：A1420XXXXXX，并持有…」
+ * 现在改为：名称、机关、日期、编号各自**逐字取自原文**，由程序拼成一句。
+ *
+ * 兜底：万一某个字段不是原文的子串（抽取规则写错时会发生），
+ * 就退回整行原文 —— 宁可读着啰嗦，也不让一个来路不明的字进标书。
+ * 句中「编号」「合同号」这类标签是程序写的，不是事实数据，这一点在界面里也讲明了。 */
+function renderFact(f) {
+  if (!factFieldsVerbatim(f)) return f.raw;
+  const parts = [];
+  if (f.issuer) parts.push(f.issuer);
+  if (f.date_raw) parts.push(f.date_raw);
+  if (f.ref_no) parts.push((f.kind === "project" ? "合同号 " : "编号 ") + f.ref_no);
+  return parts.length ? f.title + "（" + parts.join("，") + "）" : f.title;
+}
+
+/* ---------------------------------------------------------- 招标文件要素 */
+
+/* 认定「硬性要求」用两个条件相与：命中主题词 + 有强制语气。
+ *
+ * 早先的写法是要求「资质」后面跟着「要求/条件」这类词 —— 可招标文件实际
+ * 写的是「投标人必须具有环保工程专业承包壹级及以上资质」，词序正好相反，
+ * 结果实测 5 条只认出 1 条。改成「主题词 + 强制语气」组合后不再依赖词序。 */
+const REQ_TOPIC = /(资质|资格|业绩|类似工程|同类工程|项目负责人|项目经理|建造师|人员|财务|注册资本|净资产|保证金|信誉|失信|不良记录)/;
+const REQ_FORCE = /(必须|应当|应具|应有|不得|不低于|不少于|须|需具|要求|禁止|严禁|否决)/;
+
+function extractTender(text) {
+  const lines = text.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+
+  const grab = (pats) => {
+    for (const p of pats) {
+      for (const l of lines) {
+        const m = l.match(p);
+        if (m && m[1] && m[1].trim().length >= 2) {
+          return m[1].trim().replace(/[。；;，,]$/, "");
+        }
+      }
+    }
+    return "";
+  };
+
+  const fields = {
+    项目名称: grab([
+      /(?:项目名称|工程名称|标段名称|采购项目名称)\s*[：:]\s*(.+)/,
+      /(?:项目名称|工程名称)\s+(.{4,60})$/,
+    ]),
+    招标编号: grab([
+      /(?:招标编号|项目编号|采购编号|招标文件编号|标段编号)\s*[：:]\s*([A-Za-z0-9\-—–_（）()\[\]【】/.]{4,40})/,
+    ]),
+    招标人: grab([
+      /(?:招标人|采购人|招标单位|建设单位|招标人名称)\s*[：:]\s*(.{3,40})/,
+    ]),
+    投标截止时间: grab([
+      /(?:投标截止时间|投标文件递交截止时间|递交投标文件截止时间|响应文件递交截止时间)\s*[：:]\s*(.{4,40})/,
+    ]),
+    开标时间: grab([
+      /(?:开标时间|开启时间|唱标时间)\s*[：:]\s*(.{4,40})/,
+    ]),
+    投标保证金: grab([
+      /(?:投标保证金|保证金)(?:金额)?\s*[：:为]?\s*(?:人民币)?\s*([0-9,，.]+\s*(?:万)?元)/,
+    ]),
+    工期要求: grab([
+      /(?:工期|服务期|计划工期|履约期限)\s*[：:]\s*(.{2,40})/,
+    ]),
+  };
+
+  // 章节标题
+  const chapters = [];
+  for (const l of lines) {
+    const m = l.match(/^第[一二三四五六七八九十百]+[章节部分篇]\s*(.{2,50})$/);
+    if (m) chapters.push(m[0].trim());
+  }
+
+  // 硬性要求：带「必须/应当/不得/不低于」等强制语气，且涉及资质业绩人员
+  const reqs = [];
+  for (const { text: s, line } of splitSentences(text)) {
+    if (s.length < 8 || s.length > 300) continue;
+    if (!REQ_TOPIC.test(s) || !REQ_FORCE.test(s)) continue;
+    reqs.push({ text: s, line });
+    if (reqs.length >= 40) break;
+  }
+
+  // 关键词：从项目名称里剥掉通用词，用来在事实库里找同类业绩
+  let keyword = fields.项目名称 || "";
+  keyword = keyword
+    .replace(/[（(][^）)]*[）)]/g, " ")
+    .replace(/(招标公告|招标文件|采购公告|项目|工程|标段|施工|总承包|一期|二期|三期|建设)/g, " ")
+    .trim().split(/\s+/).filter(Boolean).join(" ");
+
+  return { fields, chapters, reqs, keyword, chars: text.length, lines: lines.length };
+}
+
+/* ==================================================================== 生成 */
+/* 全部由程序拼接，逐字取自事实库；不经任何模型改写。
+   缺哪一类事实就整体拒绝出稿 —— 与工作台同一条纪律。 */
+
+const SLOTS = {
+  qualification: { need: 1, name: "资质类别" },
+  certificate: { need: 1, name: "资质证书" },
+  patent: { need: 1, name: "专利" },
+  project: { need: 2, name: "工程业绩" },
+};
+
+function buildDraft() {
+  const facts = state.facts;
+  const tender = state.tender;
+  const byKind = (k) => facts.filter((f) => f.kind === k);
+
+  const missing = [];
+  for (const [k, spec] of Object.entries(SLOTS)) {
+    const have = byKind(k).length;
+    if (have < spec.need) {
+      missing.push(`${spec.name}：至少需要 ${spec.need} 条，事实库里只有 ${have} 条`);
+    }
+  }
+  if (!tender || !tender.fields.项目名称) {
+    missing.push("招标文件里的「项目名称」还没读到 —— 请回第一步填写");
+  }
+  if (missing.length) {
+    return { blocked: true, reasons: missing };
+  }
+
+  const sections = [];
+  const citations = [];
+  let full = "";
+
+  // 按类别整体列出（资质与证书同项目关键词无关，全量列出）
+  const qual = byKind("qualification").slice(0, 1);
+  const certs = byKind("certificate").slice(0, 4);
+  const projs = byKind("project").slice(0, 6);
+  const pats = byKind("patent").slice(0, 5);
+
+  const joinRaw = (arr) => arr.map((f) => ({ fact: f }));
+
+  function push(heading, segments) {
+    if (sections.length) full += "\n";
+    const base = full.length;
+    let text = "";
+    for (const seg of segments) {
+      if (typeof seg === "string") { text += seg; continue; }
+      const f = seg.fact;
+      const inserted = renderFact(f);        // ← 字段逐字，程序组装
+      const start = base + text.length;
+      text += inserted;
+      citations.push({
+        fact_id: f.id, start, end: base + text.length,
+        rendered: inserted,
+        degraded: !factFieldsVerbatim(f),    // 退回了整行原文的，界面上要标出来
+        title: f.title, kind: f.kind, raw: f.raw,
+        source: f.source, line: f.line,
+        ref_no: f.ref_no, date: f.date, date_raw: f.date_raw, issuer: f.issuer,
+      });
+    }
+    // base 必须存下来：导出与渲染都要用它把「全文偏移」换算回「段内偏移」
+    sections.push({ heading, text, base });
+    full += text;
+  }
+
+  const t = tender.fields;
+  const bidder = ($("#bidder").value || "").trim() || "我公司";
+
+  push("第一章 投标人基本情况", [
+    `${bidder}为依法注册的环保工程企业，具备`,
+    ...joinRaw(qual),
+    "，并持有",
+    ...interleave(certs, "、"),
+    "。上述资质证书均在有效期内，投标时可提供原件核验。",
+  ]);
+
+  push("第二章 类似工程业绩", [
+    "近年我公司完成的同类工程业绩包括",
+    ...interleave(projs, "、"),
+    "。以上项目均已竣工并通过建设单位验收，可提供合同及验收证明。",
+  ]);
+
+  push("第三章 技术能力与知识产权", [
+    "我公司在环保治理领域持续投入研发，已获授权专利包括",
+    ...interleave(pats, "、"),
+    "。上述专利均为自主申请，权属清晰无争议。",
+  ]);
+
+  push("第四章 项目理解与总体思路", [
+    `本次投标项目为${t.项目名称}`,
+    t.招标编号 ? `（招标编号：${t.招标编号}）` : "",
+    t.招标人 ? `，招标人为${t.招标人}` : "",
+    "。结合我方在",
+    { fact: projs[0] },
+    "中积累的工程经验，拟按招标文件要求编制本投标方案。",
+  ]);
+
+  push("第五章 履约能力保障", [
+    "我方具备",
+    { fact: qual[0] },
+    "，并已完成",
+    ...interleave(projs.slice(0, 2), "、"),
+    "等工程，人员、设备与资金均可满足本项目工期要求"
+      + (t.工期要求 ? `（招标文件要求：${t.工期要求}）` : "") + "。",
+  ]);
+
+  const draft = {
+    draft_id: "DRAFT-" + SHA256.hex(full).slice(0, 12).toUpperCase(),
+    keyword: tender.keyword || t.项目名称,
+    project: t.项目名称,
+    bidder,
+    generated_by: ($("#actor").value || "").trim() || "投标专员",
+    generated_at: new Date().toISOString(),
+    sections, citations,
+    chars: full.length,
+    fact_count: facts.length,
+    hash: SHA256.hex(full),
+  };
+  return draft;
+}
+
+/* 在若干引用之间插入分隔符（分隔符自身不计入引用） */
+function interleave(arr, sep) {
+  const out = [];
+  arr.forEach((f, i) => {
+    if (i) out.push(sep);
+    out.push({ fact: f });
+  });
+  return out;
+}
+
+/* ==================================================================== 导出 */
+
+function draftToPlainText(d) {
+  const head = [
+    d.project || "投标文件",
+    "投标人：" + d.bidder,
+    "编制人：" + d.generated_by,
+    "生成时间：" + new Date(d.generated_at).toLocaleString("zh-CN", { hour12: false }),
+    "",
+  ].join("\n");
+  return head + d.sections.map((s) => s.heading + "\n" + s.text).join("\n\n");
+}
+
+/* 留痕版：引用带下划线，并在末尾附上每条引用的出处（文件 + 行号 + 原文）。
+   导出成 Word 时用 HTML —— Word 打开 .doc（HTML 内容）完全正常，
+   这样就不必自己拼一个 docx 的 zip 包。 */
+function draftToHtml(d, marked) {
+  const body = d.sections.map((s) => {
+    let html = "", pos = 0;
+    const local = d.citations
+      .filter((c) => c.start >= s.base && c.end <= s.base + s.text.length)
       .sort((a, b) => a.start - b.start);
-
-    let html = "", pos = base;
+    if (!marked) return `<h2>${esc(s.heading)}</h2><p>${esc(s.text)}</p>`;
     for (const c of local) {
-      if (c.start < pos) continue;              // 防重叠导致乱序
-      html += esc(sec.text.slice(pos - base, c.start - base));
-      html += `<span class="cite" data-fid="${esc(c.fact_id)}">` +
-              esc(sec.text.slice(c.start - base, c.end - base)) + `</span>`;
+      if (c.start < pos) continue;
+      html += esc(s.text.slice(pos - s.base, c.start - s.base));
+      html += `<u>${esc(s.text.slice(c.start - s.base, c.end - s.base))}</u>`;
       pos = c.end;
     }
-    html += esc(sec.text.slice(pos - base));
-    return `<h4>${esc(sec.heading)}</h4><p>${html}</p>`;
-  }).join("");
+    html += esc(s.text.slice(pos - s.base));
+    return `<h2>${esc(s.heading)}</h2><p>${html}</p>`;
+  }).join("\n");
+
+  if (!marked) return body;
+
+  const refs = d.citations.map((c, i) =>
+    `<li>［${i + 1}］<b>${esc(c.title)}</b>（${esc(KIND_LABEL[c.kind] || c.kind)}）<br>`
+    + `出处：${esc(c.source)} 第 ${c.line} 行<br>原文：${esc(c.raw)}</li>`).join("");
+
+  return body + `\n<h2>附：事实引用出处（共 ${d.citations.length} 处）</h2>\n`
+    + `<p>本文件正文中每一处下划线文字，均逐字取自下列材料的原文，未经改写。</p>\n`
+    + `<ol>${refs}</ol>`;
 }
 
-function showCitation(c) {
-  openModal(`
-    <h3>事实溯源</h3>
-    <div class="kv">
-      <div class="k">事实编号</div><div class="v mono">${esc(c.fact_id)}</div>
-      <div class="k">事实名称</div><div class="v">${esc(c.title)}</div>
-      <div class="k">类别</div><div class="v">${esc(c.kind)}</div>
-      <div class="k">签发时间</div><div class="v">${esc(c.issued_at)}</div>
-      <div class="k">证书原件</div><div class="v mono">${esc(c.evidence_uri)}</div>
-      <div class="k">文本位置</div><div class="v mono">[${c.start}, ${c.end})</div>
-    </div>
-    <div class="quote">${esc(c.rendered)}</div>
-    <p style="color:#5B6B7B;font-size:12.5px;margin-top:12px">
-      这段文字是逐字从资质业绩库复制的 —— 模型从未获得改写它的权限。
-      回查器会将本段与库中记录逐字比对，任何偏差都会阻断出稿。
-    </p>`);
+function wordHtml(title, inner) {
+  return `<html xmlns:o="urn:schemas-microsoft-com:office:office" `
+    + `xmlns:w="urn:schemas-microsoft-com:office:word" `
+    + `xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8">`
+    + `<title>${esc(title)}</title>`
+    + `<style>@page{size:A4;margin:2.5cm 2.2cm}`
+    + `body{font-family:"仿宋","FangSong","SimSun",serif;font-size:12pt;line-height:1.7}`
+    + `h1{font-family:"黑体","SimHei",sans-serif;font-size:18pt;text-align:center;margin:0 0 6pt}`
+    + `h2{font-family:"黑体","SimHei",sans-serif;font-size:14pt;margin:16pt 0 8pt}`
+    + `p{margin:0 0 6pt;text-indent:2em;text-align:justify}`
+    + `ol{margin:0;padding-left:2em}li{margin-bottom:8pt;text-indent:0}`
+    + `.meta{text-align:center;text-indent:0;color:#444;margin-bottom:18pt}`
+    + `</style></head><body>`
+    + `<h1>${esc(title)}</h1>`
+    + `<p class="meta">投标人：${esc(title_bidder)}　编制人：${esc(title_actor)}　${esc(title_date)}</p>`
+    + inner + `</body></html>`;
 }
 
-async function doGenerate() {
-  const btn = $("#btnGen");
-  const box = $("#genResult");
-  const keyword = $("#kw").value.trim();
-  if (!keyword) { toast("请填写项目关键词", true); return; }
+let title_bidder = "", title_actor = "", title_date = "";
+function buildWord(d, marked) {
+  title_bidder = d.bidder;
+  title_actor = d.generated_by;
+  title_date = new Date(d.generated_at).toLocaleDateString("zh-CN");
+  return wordHtml((d.project || "投标文件") + " 投标文件", draftToHtml(d, marked));
+}
 
-  btn.disabled = true;
-  box.innerHTML = '<div class="panel"><div class="spin">生成中，正在回查事实引用…</div></div>';
-  try {
-    const r = await api("/api/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        template: $("#tpl").value, keyword, actor: $("#actor").value.trim() || "投标专员",
-      }),
-    });
+function download(filename, content, mime) {
+  const blob = new Blob(["﻿", content], { type: mime + ";charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 3000);
+}
 
-    if (r.blocked) {
-      box.innerHTML = `
-        <div class="blockedbox">
-          <h3>已阻断出稿 —— 回查未通过</h3>
-          <p style="margin:0;color:#7A3B36;font-size:13px">
-            系统在事实引用被核验之前不会交出任何初稿。共 ${r.reasons.length} 项问题：
-          </p>
-          <ul>${r.reasons.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
-        </div>
-        <div class="panel">
-          <p style="margin:0;color:#5B6B7B;font-size:13px">
-            这不是故障，而是设计：<b>阻断是默认行为，放行才需要条件</b>。
-            本次阻断已写入审计日志。
-          </p>
-        </div>`;
-      loadStatus();
-      return;
-    }
+function safeName(s) {
+  return String(s || "投标文件").replace(/[\\/:*?"<>|\s]+/g, "_").slice(0, 40);
+}
 
-    const risk = r.risk || { coverage: 0, checked: 0, findings: [] };
-    box.innerHTML = `
-      <div class="result-head">
-        <span class="pill ok">回查通过</span>
-        <span style="color:#5B6B7B;font-size:13px">
-          引用 ${r.citations.length} 处事实，全部逐字核对无误 ·
-          数据版本 ${esc(r.snapshot_id)} · 生成人 ${esc(r.generated_by)}
+/* ==================================================================== 视图 */
+
+function renderTender() {
+  const box = $("#tenderResult");
+  if (!state.tender) {
+    box.innerHTML = '<div class="panel"><div class="empty">还没有上传招标文件</div></div>';
+    return;
+  }
+  const t = state.tender;
+  const f = t.fields;
+  const rows = Object.keys(f).map((k) =>
+    `<div class="k">${esc(k)}</div>
+     <div class="v"><input data-field="${esc(k)}" value="${esc(f[k] || "")}"
+        placeholder="${f[k] ? "" : "未读到，请手动填写"}"></div>`).join("");
+
+  box.innerHTML = `
+    <div class="panel">
+      <h3>从招标文件里读到的要素 <span class="tag">可直接修改</span></h3>
+      <div class="kv">${rows}</div>
+      <div class="btnrow" style="margin-top:14px">
+        <button class="primary" id="saveTenderBtn">保存这些要素</button>
+        <span style="color:#5B6B7B;font-size:12.5px">
+          读完 ${t.lines} 行 / ${t.chars} 字${t.chapters.length ? "，" + t.chapters.length + " 个章节标题" : ""}
         </span>
       </div>
-      <div class="draft">${renderDraft(r.sections, r.citations)}</div>
-      <div class="riskbox">
-        <h3>合规自检 · 12 类废标风险点</h3>
-        <p style="margin:0;font-size:13px">
-          覆盖率 <b>${(risk.coverage * 100).toFixed(0)}%</b>（已执行 ${risk.checked} 类）
-          ${risk.findings.length
-            ? `· 命中 <b style="color:#C04A3F">${risk.findings.length}</b> 项，需人工处理：`
-            : `· <span class="ok">未命中风险点</span>`}
-        </p>
-        ${risk.findings.length ? `<ul style="margin:8px 0 0;padding-left:20px;font-size:13px">
-          ${risk.findings.map((f) =>
-            `<li><b>${esc(f.code)}</b>｜定位：${esc(f.located)}｜${esc(f.detail)}</li>`).join("")}
-        </ul>` : ""}
-      </div>
-      <div class="panel" style="margin-top:14px">
-        <p style="margin:0;color:#5B6B7B;font-size:13px">
-          点击正文中<span class="cite">带下划线的高亮文字</span>可查看该处事实的
-          编号、来源与证书原件。这些文字由程序直接拼接，<b>不经过模型</b>。
-        </p>
-      </div>`;
+    </div>
 
-    box.querySelectorAll(".cite").forEach((el) => {
-      el.addEventListener("click", () => {
-        const c = r.citations.find((x) => x.fact_id === el.dataset.fid);
-        if (c) showCitation(c);
-      });
+    ${t.reqs.length ? `
+    <div class="panel">
+      <h3>招标文件里的硬性要求（${t.reqs.length} 条）</h3>
+      <p style="margin:0 0 10px;font-size:12.5px;color:#5B6B7B">
+        含「必须 / 应当 / 不得 / 不低于」等强制语气的条款，逐条列在这里供核对。</p>
+      <table><tr><th style="width:70px">行号</th><th>原文</th></tr>
+      ${t.reqs.map((r) => `<tr><td class="mono">${r.line}</td><td>${esc(r.text)}</td></tr>`).join("")}
+      </table>
+    </div>` : ""}
+
+    ${t.chapters.length ? `
+    <div class="panel">
+      <h3>招标文件章节</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        ${t.chapters.map((c) => `<span class="tag">${esc(c)}</span>`).join("")}
+      </div>
+    </div>` : ""}
+
+    <details class="panel">
+      <summary style="cursor:pointer;font-size:14px;color:#1E5E86;font-weight:600">
+        查看 / 修改识别出的全文（${t.chars} 字）</summary>
+      <div style="margin-top:12px">
+        <textarea id="tenderText" style="min-height:260px">${esc(t.text)}</textarea>
+        <div class="btnrow" style="margin-top:8px">
+          <button id="reparseTenderBtn">按修改后的全文重新识别</button>
+        </div>
+      </div>
+    </details>`;
+
+  $("#saveTenderBtn").addEventListener("click", () => {
+    $$("#tenderResult input[data-field]").forEach((el) => {
+      state.tender.fields[el.dataset.field] = el.value.trim();
     });
-    loadStatus();
-  } catch (e) {
-    box.innerHTML = `<div class="panel"><div class="empty">生成失败：${esc(e.message)}</div></div>`;
-  } finally {
-    btn.disabled = false;
-  }
+    chainAppend("tender.fields", { 项目名称: state.tender.fields.项目名称 });
+    save(); paintProgress(); toast("招标文件要素已保存");
+    renderTender();
+  });
+  $("#reparseTenderBtn").addEventListener("click", () => {
+    const text = $("#tenderText").value;
+    const r = extractTender(text);
+    state.tender = Object.assign({}, state.tender, r, { text });
+    chainAppend("tender.reparsed", { chars: r.chars });
+    save(); paintProgress(); renderTender(); toast("已按修改后的全文重新识别");
+  });
 }
 
-$("#btnGen").addEventListener("click", doGenerate);
+function renderFacts() {
+  const box = $("#coResult");
+  if (!state.facts.length) {
+    box.innerHTML = '<div class="panel"><div class="empty">事实库是空的。上传公司资料后点「从资料里抽取事实」</div></div>';
+    return;
+  }
+  const counts = {};
+  state.facts.forEach((f) => { counts[f.kind] = (counts[f.kind] || 0) + 1; });
 
-/* ------------------------------------------------------------ 审计留痕 */
-async function loadAudit() {
-  const sum = $("#auditSummary");
-  sum.innerHTML = '<div class="spin">加载中…</div>';
-  let a, drafts;
-  try {
-    [a, drafts] = await Promise.all([api("/api/audit"), api("/api/drafts")]);
-  } catch (e) {
-    sum.innerHTML = `<div class="empty">加载失败：${esc(e.message)}</div>`;
+  box.innerHTML = `
+    <div class="panel">
+      <h3>事实库（${state.facts.length} 条）</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+        ${Object.keys(counts).map((k) =>
+          `<span class="tag ${KIND_TAG[k] || ""}">${esc(KIND_LABEL[k] || k)} ${counts[k]}</span>`).join("")}
+      </div>
+      <p style="margin:0 0 10px;font-size:12.5px;color:#5B6B7B">
+        每条下方引号里的文字是<b>原文逐字</b>——写进标书的就是它，系统不会改写。
+        点「改」可以修正识别错的名称、编号、日期。</p>
+      <div class="stack">
+        ${state.facts.map((f) => `
+          <div class="fact">
+            <div class="top">
+              <span class="fid">${esc(f.id)}</span>
+              <span class="ttl">${esc(f.title)}</span>
+              <span class="tag ${KIND_TAG[f.kind] || ""}">${esc(KIND_LABEL[f.kind] || f.kind)}</span>
+              <button style="margin-left:auto;padding:3px 12px;font-size:12.5px"
+                      data-edit="${esc(f.id)}">改</button>
+              <button class="danger" style="padding:3px 12px;font-size:12.5px"
+                      data-del="${esc(f.id)}">删</button>
+            </div>
+            <div class="meta">${esc(f.issuer || "—")} · ${esc(f.date || "—")} · 编号 ${esc(f.ref_no || "—")}</div>
+            <div class="raw">「${esc(f.raw)}」</div>
+            <div class="src">出处：${esc(f.source)} 第 ${f.line} 行</div>
+          </div>`).join("")}
+      </div>
+    </div>`;
+
+  $$("#coResult [data-del]").forEach((b) => b.addEventListener("click", () => {
+    state.facts = state.facts.filter((f) => f.id !== b.dataset.del);
+    chainAppend("fact.deleted", { id: b.dataset.del });
+    save(); paintProgress(); renderFacts();
+  }));
+  $$("#coResult [data-edit]").forEach((b) => b.addEventListener("click", () => {
+    const f = state.facts.find((x) => x.id === b.dataset.edit);
+    openModal(`
+      <h3>修改事实 ${esc(f.id)}</h3>
+      <div class="kv">
+        <div class="k">名称</div><div class="v"><input id="efTitle" value="${esc(f.title)}"></div>
+        <div class="k">类别</div><div class="v">
+          <select id="efKind">${Object.keys(KIND_LABEL).map((k) =>
+            `<option value="${k}"${k === f.kind ? " selected" : ""}>${KIND_LABEL[k]}</option>`).join("")}</select>
+        </div>
+        <div class="k">签发单位</div><div class="v"><input id="efIssuer" value="${esc(f.issuer || "")}"></div>
+        <div class="k">日期</div><div class="v"><input id="efDate" value="${esc(f.date || "")}"></div>
+        <div class="k">编号</div><div class="v"><input id="efRef" value="${esc(f.ref_no || "")}"></div>
+      </div>
+      <p style="font-size:12.5px;color:#5B6B7B;margin-top:14px">
+        下方原文<b>不可编辑</b>——它是这条事实的唯一依据。若原文本身不对，
+        请删掉这条、改材料后重新抽取。</p>
+      <div class="quote">${esc(f.raw)}</div>
+      <div class="btnrow" style="margin-top:16px">
+        <button class="primary" id="efSave">保存</button>
+      </div>`);
+    $("#efSave").addEventListener("click", () => {
+      f.title = $("#efTitle").value.trim();
+      f.kind = $("#efKind").value;
+      f.issuer = $("#efIssuer").value.trim();
+      f.date = $("#efDate").value.trim();
+      f.ref_no = $("#efRef").value.trim();
+      chainAppend("fact.edited", { id: f.id, title: f.title });
+      save(); $("#modal").classList.remove("open"); paintProgress(); renderFacts();
+      toast("已保存");
+    });
+  }));
+}
+
+function renderGen() {
+  const box = $("#genResult");
+  const d = state.draft;
+  if (!d) {
+    box.innerHTML = '<div class="panel"><div class="empty">还没有生成过。填好前两步后点上面的按钮</div></div>';
+    return;
+  }
+  if (d.blocked) {
+    box.innerHTML = `
+      <div class="blockedbox">
+        <h3>已阻断出稿 —— 材料不齐</h3>
+        <p style="margin:0;color:#7A3B36;font-size:13px">
+          系统在事实核验通过之前不会交出任何初稿。共 ${d.reasons.length} 项：</p>
+        <ul>${d.reasons.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+      </div>
+      <div class="panel"><p style="margin:0;color:#5B6B7B;font-size:13px">
+        这不是故障，而是设计：<b>阻断是默认行为，放行才需要条件</b>。
+        缺的哪一类，就回第二步补哪一类的材料。</p></div>`;
     return;
   }
 
-  sum.innerHTML = `<div class="summary">
-    <div class="sum ${a.chain_ok ? "ok" : "bad"}">
-      <div class="n">${a.chain_ok ? "完整" : "断裂"}</div>
-      <div class="l">哈希链（${a.length} 条记录）</div>
+  const marked = window._marked !== false;
+  box.innerHTML = `
+    <div class="result-head">
+      <span class="pill ok">已生成</span>
+      <span style="color:#5B6B7B;font-size:13px">
+        ${d.sections.length} 章 · 引用 ${d.citations.length} 处事实 · 共 ${d.chars} 字 ·
+        数据指纹 <span class="mono">${d.hash.slice(0, 12)}…</span></span>
     </div>
-    <div class="sum ${a.quadruple_complete ? "ok" : "bad"}">
-      <div class="n">${a.quadruple_complete ? "齐全" : a.missing.length + " 份缺"}</div>
-      <div class="l">四元组完整率</div>
+
+    <div class="btnrow" style="margin-bottom:14px">
+      <button class="${marked ? "primary" : ""}" id="modeMarked">留痕版</button>
+      <button class="${marked ? "" : "primary"}" id="modePlain">净版</button>
+      <span style="color:#5B6B7B;font-size:12.5px">
+        ${marked ? "引用带下划线，并附出处清单 —— 供内部复核用"
+                 : "不带任何标记，可直接提交 —— 提交前请先自己复核一遍"}</span>
     </div>
-    <div class="sum"><div class="n">${drafts.length}</div><div class="l">已生成初稿</div></div>
-  </div>
-  <div class="panel"><p style="margin:0;font-size:13px;color:#5B6B7B">
-    ${esc(a.chain_summary)}
-  </p></div>`;
 
-  $("#draftsList").innerHTML = drafts.length
-    ? `<table><tr><th>初稿编号</th><th>项目</th><th>引用</th><th>数据版本</th><th>审定人</th><th>操作</th></tr>
-       ${drafts.map((d) => `<tr>
-         <td class="mono">${esc(d.draft_id)}</td>
-         <td>${esc(d.keyword)}</td>
-         <td>${d.citations}</td>
-         <td class="mono">${esc(d.snapshot_id)}</td>
-         <td>${d.完整 ? esc(d.审定人) : '<span style="color:#C04A3F">待审定</span>'}</td>
-         <td>${d.完整 ? "—" : `<button data-approve="${esc(d.draft_id)}">审定</button>`}</td>
-       </tr>`).join("")}</table>`
-    : '<div class="empty">还没有生成过初稿。到「标书生成」页试试。</div>';
+    <div class="draft" id="draftBody">
+      ${d.sections.map((s, i) => `<h4>${esc(s.heading)}</h4><p>${renderSectionText(d, i, marked)}</p>`).join("")}
+    </div>
 
-  $("#draftsList").querySelectorAll("[data-approve]").forEach((b) => {
-    b.addEventListener("click", async () => {
-      const who = prompt("请输入审定人姓名（不得与生成人相同）：");
-      if (!who) return;
-      try {
-        await api("/api/approve", {
-          method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ draft_id: b.dataset.approve, reviewer: who.trim() }),
-        });
-        toast("审定已记录，四元组补齐。");
-        loadAudit();
-      } catch (e) { toast(e.message, true); }
-    });
+    ${marked ? `
+    <div class="panel" style="margin-top:14px">
+      <h3>事实引用出处（${d.citations.length} 处）</h3>
+      <table><tr><th style="width:44px">#</th><th>事实</th><th>出处</th></tr>
+      ${d.citations.map((c, i) => `<tr>
+        <td>${i + 1}</td>
+        <td>${esc(c.title)} <span class="tag ${KIND_TAG[c.kind] || ""}">${esc(KIND_LABEL[c.kind] || c.kind)}</span></td>
+        <td class="mono">${esc(c.source)} 第 ${c.line} 行</td>
+      </tr>`).join("")}
+      </table>
+    </div>` : ""}
+
+    <div class="panel" style="margin-top:14px">
+      <h3>导出</h3>
+      <div class="btnrow">
+        <button class="primary" id="expDoc">导出 Word（.doc）</button>
+        <button id="expMd">导出 Markdown</button>
+        <button id="expTxt">导出纯文本</button>
+        <button id="expPrint">打印 / 存为 PDF</button>
+      </div>
+      <p style="margin:10px 0 0;font-size:12.5px;color:#5B6B7B">
+        导出的 Word 是<b>${marked ? "留痕版" : "净版"}</b>（点上面的按钮可切换）。
+        <b>净版提交前请先自己复核</b>：系统只保证「引用的文字与材料原文逐字一致」，
+        不保证这些材料本身符合本次招标的资质、业绩要求 —— 那要人来判断。</p>
+    </div>`;
+
+  $$("#draftBody .cite").forEach((el) => el.addEventListener("click", () => {
+    const c = d.citations.find((x) => x.fact_id === el.dataset.fid);
+    if (!c) return;
+    openModal(`
+      <h3>事实溯源</h3>
+      <div class="kv">
+        <div class="k">事实编号</div><div class="v mono">${esc(c.fact_id)}</div>
+        <div class="k">写进正文</div><div class="v">${esc(c.rendered || c.raw)}</div>
+        <div class="k">类别</div><div class="v">${esc(KIND_LABEL[c.kind] || c.kind)}</div>
+        <div class="k">出自</div><div class="v mono">${esc(c.source)} 第 ${c.line} 行</div>
+        <div class="k">文本位置</div><div class="v mono">[${c.start}, ${c.end})</div>
+      </div>
+      <div class="quote">材料原文：「${esc(c.raw)}」</div>
+      ${c.degraded ? `
+        <div class="warnbox" style="margin-top:12px">
+          <b>这条是退回整行插入的。</b>它的名称／机关／日期／编号里，
+          有字段没能对上原文，系统宁可整行照抄，也不拼一个来路不明的字。
+          建议回第二步核对这条事实的字段是否识别有误。
+        </div>` : `
+        <p style="color:#5B6B7B;font-size:12.5px;margin-top:12px">
+          正文里那句话，是把<b>名称、签发单位、日期、编号</b>四个字段照抄原文后
+          由程序拼起来的；「编号」二字是程序加的标签，不是材料里的字。
+          <b>没有任何模型参与改写</b>，四个字段都能在上面这行原文里逐字找到。
+          要改，只能回第二步改材料或改事实条目。</p>`}`);
+  }));
+
+  $("#modeMarked").addEventListener("click", () => { window._marked = true; renderGen(); });
+  $("#modePlain").addEventListener("click", () => { window._marked = false; renderGen(); });
+
+  $("#expDoc").addEventListener("click", () => {
+    download(`${safeName(d.project)}_投标文件_${today()}.doc`, buildWord(d, marked), "application/msword");
+    chainAppend("draft.exported", { draft_id: d.draft_id, format: "doc", marked });
+    save(); paintProgress();
   });
-
-  $("#auditLog").innerHTML = a.records.length
-    ? `<table><tr><th>#</th><th>时间</th><th>操作人</th><th>动作</th><th>本记录哈希</th><th>前条哈希</th></tr>
-       ${a.records.slice().reverse().map((r) => `<tr>
-         <td>${r.seq}</td><td>${esc(r.ts)}</td><td>${esc(r.actor)}</td>
-         <td>${esc(r.action)}</td>
-         <td class="mono">${esc(r.hash)}</td><td class="mono">${esc(r.prev)}</td>
-       </tr>`).join("")}</table>`
-    : '<div class="empty">暂无审计记录</div>';
+  $("#expMd").addEventListener("click", () => {
+    const md = `# ${d.project || "投标文件"}\n\n> 投标人：${d.bidder}　编制人：${d.generated_by}　${today()}\n\n`
+      + d.sections.map((s) => `## ${s.heading}\n\n${s.text}`).join("\n\n")
+      + (marked ? "\n\n## 附：事实引用出处\n\n"
+        + d.citations.map((c, i) => `${i + 1}. **${c.title}**（${KIND_LABEL[c.kind] || c.kind}）  \n   出处：${c.source} 第 ${c.line} 行  \n   原文：${c.raw}`).join("\n")
+        : "");
+    download(`${safeName(d.project)}_投标文件_${today()}.md`, md, "text/markdown");
+    chainAppend("draft.exported", { draft_id: d.draft_id, format: "md", marked });
+    save(); paintProgress();
+  });
+  $("#expTxt").addEventListener("click", () => {
+    download(`${safeName(d.project)}_投标文件_${today()}.txt`, draftToPlainText(d), "text/plain");
+    chainAppend("draft.exported", { draft_id: d.draft_id, format: "txt", marked });
+    save(); paintProgress();
+  });
+  $("#expPrint").addEventListener("click", () => {
+    printDraft(d, marked);
+    chainAppend("draft.exported", { draft_id: d.draft_id, format: "print", marked });
+    save(); paintProgress();
+  });
 }
 
-/* ------------------------------------------------------------ 启动 */
-loadStatus();
-loadOpps();
+/* 渲染一章的正文：把引用切成可点的高亮块 */
+function renderSectionText(d, idx, marked) {
+  const s = d.sections[idx];
+  const base = s.base;
+  const local = d.citations
+    .filter((c) => c.start >= base && c.end <= base + s.text.length)
+    .sort((a, b) => a.start - b.start);
+  if (!marked) return esc(s.text);
+
+  let html = "", pos = base;
+  for (const c of local) {
+    if (c.start < pos) continue;
+    html += esc(s.text.slice(pos - base, c.start - base));
+    html += `<span class="cite" data-fid="${esc(c.fact_id)}">`
+      + esc(s.text.slice(c.start - base, c.end - base)) + `</span>`;
+    pos = c.end;
+  }
+  html += esc(s.text.slice(pos - base));
+  return html;
+}
+
+/* 打印：不另起窗口（会被拦截），把正文搬进一个只在打印时显示的容器 */
+function printDraft(d, marked) {
+  let area = $("#printArea");
+  if (!area) {
+    area = document.createElement("div");
+    area.id = "printArea";
+    document.body.appendChild(area);
+  }
+  area.innerHTML = `<h1 style="text-align:center;font-size:18pt;margin:0 0 6pt">${esc(d.project || "投标文件")} 投标文件</h1>`
+    + `<p style="text-align:center;text-indent:0;color:#444;margin-bottom:18pt">`
+    + `投标人：${esc(d.bidder)}　编制人：${esc(d.generated_by)}　${esc(new Date().toLocaleDateString("zh-CN"))}</p>`
+    + d.sections.map((s, i) => `<h2 style="font-size:14pt;margin:16pt 0 8pt">${esc(s.heading)}</h2>`
+      + `<p style="margin:0 0 6pt;text-indent:2em;text-align:justify">${renderSectionText(d, i, marked)}</p>`).join("");
+  document.body.classList.add("printing");
+  setTimeout(() => {
+    window.print();
+    document.body.classList.remove("printing");
+  }, 60);
+}
+
+function renderAudit() {
+  const v = chainVerify();
+  $("#auditSummary").innerHTML = `
+    <div class="panel" style="border-color:${v.ok ? "#3EA86F" : "#C04A3F"}">
+      <h3 style="color:${v.ok ? "#3EA86F" : "#C04A3F"};margin:0">
+        ${v.ok ? `哈希链完整 · 共 ${v.length} 条记录，逐条重算一致`
+               : `哈希链在第 ${v.at} 条断裂 —— 数据被改动过`}
+      </h3>
+    </div>`;
+
+  const rows = state.audit.slice().reverse();
+  $("#auditLog").innerHTML = rows.length
+    ? `<table><tr><th style="width:44px">#</th><th style="width:150px">时间</th>
+        <th style="width:130px">动作</th><th>本记录哈希</th><th>前条哈希</th></tr>
+       ${rows.map((r) => `<tr>
+         <td>${r.seq}</td>
+         <td class="mono">${esc(new Date(r.ts).toLocaleString("zh-CN", { hour12: false }))}</td>
+         <td>${esc(r.action)}</td>
+         <td class="mono">${r.hash.slice(0, 16)}…</td>
+         <td class="mono">${r.prev.slice(0, 16)}…</td>
+       </tr>`).join("")}</table>
+       <p style="margin:12px 0 0;font-size:12.5px;color:#5B6B7B">
+         表的渲染顺序是「新在上」。所以<b>上一行的「前条哈希」正是下一行的「本记录哈希」</b>，
+         第一行的前条哈希是 ${"0".repeat(16)}…（创世记录）。</p>`
+    : '<div class="empty">还没有记录</div>';
+}
+
+/* ---------------------------------------------------------- 进度与标签页 */
+
+function paintProgress() {
+  const hasTender = !!(state.tender && state.tender.text);
+  const hasFacts = state.facts.length > 0;
+  const hasDraft = !!(state.draft && !state.draft.blocked);
+
+  const set = (id, ok, now) => {
+    const el = $(id);
+    el.className = "p" + (ok ? " ok" : "") + (now ? " now" : "");
+  };
+  set("#p1", hasTender, !hasTender);
+  set("#p2", hasFacts, hasTender && !hasFacts);
+  set("#p3", hasDraft, hasTender && hasFacts && !hasDraft);
+  set("#p4", state.audit.length > 0, false);
+
+  const s = (id, ok, n) => { const el = $(id); el.textContent = ok ? "✓" : n; };
+  s("#s1", hasTender, "1"); s("#s2", hasFacts, "2"); s("#s3", hasDraft, "3");
+}
+
+function show(view) {
+  $$(".tab").forEach((b) => b.classList.toggle("active", b.dataset.view === view));
+  $$(".view").forEach((v) => v.classList.toggle("active", v.id === "view-" + view));
+  if (view === "audit") renderAudit();
+  if (view === "company") renderFacts();
+  if (view === "gen") renderGen();
+  if (view === "tender") renderTender();
+}
+
+$$(".tab").forEach((btn) => btn.addEventListener("click", () => show(btn.dataset.view)));
+
+/* ==================================================================== 上传 */
+
+function wireDrop(dropId, inputId, onFiles) {
+  const drop = $(dropId), input = $(inputId);
+  drop.addEventListener("click", () => input.click());
+  input.addEventListener("change", () => { if (input.files.length) onFiles(Array.from(input.files)); });
+  ["dragenter", "dragover"].forEach((ev) => drop.addEventListener(ev, (e) => {
+    e.preventDefault(); drop.classList.add("over");
+  }));
+  ["dragleave", "drop"].forEach((ev) => drop.addEventListener(ev, (e) => {
+    e.preventDefault(); drop.classList.remove("over");
+  }));
+  drop.addEventListener("drop", (e) => {
+    const files = Array.from(e.dataTransfer.files || []);
+    if (files.length) onFiles(files);
+  });
+}
+
+/* ---------------------------------------------------------- 招标文件 */
+
+async function handleTenderFiles(files) {
+  const f = files[0];
+  $("#tenderInfo").textContent = "读取中：" + f.name;
+  try {
+    const text = await fileToText(f);
+    if (!text || text.length < 10) throw new Error("文件里没读到文字");
+    const r = extractTender(text);
+    state.tender = Object.assign({ file: f.name, text }, r);
+    chainAppend("tender.parsed", { file: f.name, chars: r.chars, lines: r.lines });
+    save(); paintProgress(); renderTender();
+    $("#tenderInfo").textContent = `已读取 ${f.name}（${r.chars} 字 / ${r.lines} 行）`;
+    toast(`已读取招标文件：${r.fields.项目名称 || "（项目名称未读到，请手动填）"}`);
+    const low = (text.match(/[一-龥]/g) || []).length / Math.max(1, text.length);
+    if (low < 0.3) {
+      toast("警告：识别出的中文比例偏低，可能是扫描件或字体编码问题 —— 请在下方核对全文，必要时改用「粘贴文字」", true);
+    }
+  } catch (e) {
+    $("#tenderInfo").textContent = "";
+    toast("读取失败：" + e.message, true);
+  }
+}
+
+wireDrop("#tenderDrop", "#tenderFile", handleTenderFiles);
+$("#tenderPasteBtn").addEventListener("click", () => {
+  const w = $("#tenderPasteWrap");
+  w.style.display = w.style.display === "none" ? "block" : "none";
+});
+$("#tenderPasteGo").addEventListener("click", async () => {
+  const text = $("#tenderPaste").value.trim();
+  if (text.length < 10) { toast("粘贴的内容太短", true); return; }
+  const r = extractTender(text);
+  state.tender = Object.assign({ file: "（粘贴的文字）", text }, r);
+  chainAppend("tender.parsed", { file: "paste", chars: r.chars, lines: r.lines });
+  save(); paintProgress(); renderTender();
+  toast("已识别粘贴的招标文件");
+});
+$("#tenderClearBtn").addEventListener("click", () => {
+  state.tender = null;
+  chainAppend("tender.cleared", {});
+  save(); paintProgress(); renderTender();
+});
+
+/* ---------------------------------------------------------- 公司资料 */
+
+/* 上传的文件与粘贴的文字分开放，抽取时再合并 ——
+   否则用户在粘贴框里敲一个字，之前上传的文件就被覆盖掉了。 */
+let coFiles = [];
+const coPasted = () => {
+  const t = $("#coPaste").value.trim();
+  return t ? [{ name: "（粘贴的文字）", text: t }] : [];
+};
+const coPending = () => coFiles.concat(coPasted());
+
+async function handleCoFiles(files) {
+  $("#coInfo").textContent = "读取中…";
+  const chunks = [];
+  for (const f of files) {
+    try {
+      const t = await fileToText(f);
+      chunks.push({ name: f.name, text: t });
+    } catch (e) {
+      toast(`「${f.name}」读取失败：${e.message}`, true);
+    }
+  }
+  coFiles = coFiles.concat(chunks);
+  const all = coPending();
+  $("#coInfo").textContent = all.length
+    ? `已就绪 ${all.length} 份材料（${all.map((c) => c.name).join("、")}），点「从资料里抽取事实」`
+    : "没读到内容";
+}
+
+wireDrop("#coDrop", "#coFile", handleCoFiles);
+$("#coPasteBtn").addEventListener("click", () => {
+  const w = $("#coPasteWrap");
+  w.style.display = w.style.display === "none" ? "block" : "none";
+});
+$("#coPaste").addEventListener("input", () => {
+  const all = coPending();
+  $("#coInfo").textContent = all.length
+    ? `已就绪 ${all.length} 份材料，点「从资料里抽取事实」` : "";
+});
+$("#coExtractBtn").addEventListener("click", () => {
+  const pending = coPending();
+  if (!pending.length) { toast("先上传或粘贴公司资料", true); return; }
+
+  let added = 0;
+  const existing = new Set(state.facts.map((f) => f.kind + "|" + f.title));
+  for (const c of pending) {
+    for (const f of extractFacts(c.text, c.name)) {
+      const key = f.kind + "|" + f.title;
+      if (existing.has(key)) continue;
+      existing.add(key);
+      state.facts.push(f);
+      added++;
+    }
+  }
+  // 重新编号，保证 F-001 这样的序号连续
+  state.facts.forEach((f, i) => {
+    f.id = "F-" + String(i + 1).padStart(3, "0") + "-" + f.id.split("-").slice(-1)[0];
+  });
+  chainAppend("facts.extracted", { files: pending.map((c) => c.name), added });
+  coFiles = [];
+  $("#coPaste").value = "";
+  save(); paintProgress(); renderFacts();
+  $("#coInfo").textContent = `本次新增 ${added} 条事实`;
+  toast(added ? `抽取完成，新增 ${added} 条事实` : "没有抽到新的事实条目 —— 可能是材料里的写法不在识别规则内，可直接粘贴规范一点的文字，或检查材料是否读成了乱码", !added);
+});
+$("#coClearBtn").addEventListener("click", () => {
+  if (!confirm("清空全部事实条目？")) return;
+  state.facts = [];
+  chainAppend("facts.cleared", {});
+  save(); paintProgress(); renderFacts();
+});
+
+/* ---------------------------------------------------------- 生成 */
+
+$("#genBtn").addEventListener("click", () => {
+  const r = buildDraft();
+  if (r.blocked) {
+    state.draft = r;
+    chainAppend("draft.blocked", { reasons: r.reasons });
+    toast("材料不齐，已阻断出稿", true);
+  } else {
+    state.draft = r;
+    chainAppend("draft.generated", {
+      draft_id: r.draft_id, chars: r.chars, citations: r.citations.length, hash: r.hash,
+    });
+    toast(`初稿已生成：${r.sections.length} 章，引用 ${r.citations.length} 处事实`);
+  }
+  window._marked = true;
+  save(); paintProgress(); renderGen();
+});
+
+$("#wipeBtn").addEventListener("click", () => {
+  if (!confirm("清空全部数据（招标文件、事实库、初稿、审计记录）？此操作不可撤销。")) return;
+  localStorage.removeItem(STORE_KEY);
+  state.tender = null; state.facts = []; state.draft = null; state.audit = [];
+  coFiles = [];
+  renderTender(); renderFacts(); renderGen(); renderAudit(); paintProgress();
+  toast("已清空");
+});
+
+/* ==================================================================== 启动 */
+
+(function init() {
+  load();
+  // 顶部通知条：插在 main 之前
+  const n = document.createElement("div");
+  n.id = "notice";
+  n.className = "noticebox";
+  n.style.display = "none";
+  n.style.margin = "16px 22px 0";
+  $("main").parentNode.insertBefore(n, $("main"));
+
+  renderTender(); renderFacts(); renderGen(); renderAudit(); paintProgress();
+
+  if (!state.facts.length && !state.tender) {
+    setTimeout(() => toast("从第一步开始：把招标文件拖进上面的虚线框。数据全部存在你这台设备上，不会上传。"), 400);
+  }
+})();
 
 </script>
 </body>
